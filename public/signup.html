@@ -691,8 +691,9 @@
                     " />
                                 <script>
                                 function submitButton() {
-                                    var currentdate = new Date();
-                                    var currentLoginTime = currentdate.getDay() + "/" + currentdate.getMonth()  +  "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+                                    var currentDateAndTime = new Date().toLocaleString();
+                                    // var currentdate = new Date();
+                                    // var currentLoginTime = currentdate.getDay() + "/" + currentdate.getMonth()  +  "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
                                     var emailAddress = document.getElementById("signUpEmailField").value;
                                     var streetAddress = document.getElementById("signUpStreetAddressField").value;
                                     var zipCode = document.getElementById("signUpZipCodeField").value;
@@ -713,10 +714,10 @@
                                           //   heap.addUserProperties({ "Account- Email Address": emailAddress });
                                           // }
                                           if (emailAddress != ''){
-                                            heap.addUserProperties({ "Account - Last Login": currentLoginTime });
+                                            heap.addUserProperties({ "Account - Last Login": currentDateAndTime });
                                           }
                                           if (emailAddress != ''){
-                                            heap.addUserProperties({ "Account - Subscription Date": currentLoginTime });
+                                            heap.addUserProperties({ "Account - Subscription Date": currentDateAndTime });
                                           }
                                           // if (streetAddress != ''){
                                           //   heap.addUserProperties({ "Account - Street Address": streetAddress });

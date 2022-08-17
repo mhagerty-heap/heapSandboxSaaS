@@ -469,8 +469,9 @@
                     " />
                                 <script>
                                     function submitButton() {
-                                        var currentdate = new Date();
-                                        var currentLoginTime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+                                        var currentDateAndTime = new Date().toLocaleString();
+                                        // var currentdate = new Date();
+                                        // var currentLoginTime = currentdate.getDay() + "/" + currentdate.getMonth() + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
                                         var emailAddress = document.getElementById("signInEmailField").value;
                                         if (emailAddress.indexOf('@') === -1) {
                                             console.log("no @ in email address");
@@ -481,7 +482,7 @@
                                                 heap.identify(emailAddress);
                                                 // heap.addUserProperties({ "Account, Email Address": emailAddress });
                                                 heap.addUserProperties({
-                                                    "Account - Last Login": currentLoginTime
+                                                    "Account - Last Login": currentDateAndTime
                                                 });
                                             }
                                         }
