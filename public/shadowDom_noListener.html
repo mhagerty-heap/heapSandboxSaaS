@@ -1,0 +1,164 @@
+<!-- <!DOCTYPE html> -->
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        ShadowDom Example
+    </title>
+    <link rel="shortcut icon" href="/images/marketing/favicon.png" type="image/x-icon" />
+
+    <style>
+        body {
+            max-height: 100vh;
+            overflow: hidden;
+        }
+
+        input {
+            border: 1px solid blue
+        }
+
+        .blue {
+            border: 1px solid blue;
+        }
+
+        li em {
+            font-style: normal;
+            opacity: 0.5;
+        }
+    </style>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NTJMWV5');
+    </script>
+    <!-- End Google Tag Manager -->
+
+</head>
+
+<body>
+
+    <script src="https://cdn.rawgit.com/samthor/7b307408e73784971ef0fcf4a8af6edd/raw/81f168d4f2ab3fd86825e073f60240c3ef2988bd/shadowlisten.js"></script>
+
+    <p>
+        This is an adjunct to <a id="link" href="https://medium.com/@samthor/focus-inside-shadow-dom-78e8a575b73" target="_blank">an article on Medium</a>.
+        It shows off observing the actual focused node, even inside shadow roots.
+        It uses <a id="library" href="https://gist.github.com/samthor/7b307408e73784971ef0fcf4a8af6edd" target="_blank">a library</a> that emits custom <code>-shadow-focus</code> events (even for regular focus) with the <code>detail</code> property
+        set to the actual focus target.
+    </p>
+    <p>
+        Input elements that are not in a shadow root are highlighted in <span class="blue">blue</span>.
+    </p>
+
+    <div id="div">
+        <input placeholder="light DOM" id="light_dom" />
+    </div>
+
+    <template id="t">
+        <h2>Shadow #1</h2>
+        <style>
+            h2 {
+                font: inherit;
+                margin: 0;
+            }
+
+            :host {
+                background: rgba(255, 0, 0, 0.5);
+                padding: 12px;
+            }
+        </style>
+        <input id="one" placeholder="one" />
+        <slot></slot>
+        <input id="two" placeholder="two" />
+        <div id="internal"></div>
+    </template>
+    <template id="t2">
+        <h2>Shadow #2</h2>
+        <style>
+            h2 {
+                font: inherit;
+                margin: 0;
+            }
+
+            :host {
+                background: rgba(0, 255, 0, 0.5);
+                padding: 12px;
+            }
+        </style>
+        <input id="sub-one" placeholder="sub-one" />
+        <input id="sub-two" placeholder="sub-two" />
+    </template>
+    <input id="other" placeholder="outside" />
+
+    <!-- <h2>List of recently focused nodes</h2>
+    <ul id="log"></ul> -->
+
+    <script>
+        if (!div.attachShadow) {
+            div.textContent = 'Your browser does not support Shadow DOM :(';
+            throw new Error();
+        }
+
+        // This line adds the helper library. It then generates `-shadow-focus` events, which can be listened to...
+        //document.addEventListener('focus', shadowFocusHandler, true);
+
+        // ... here! The `ev.detail` message
+        document.addEventListener('-shadow-focus', function(ev) {
+            console.info('got -shadow-focus', ev.detail, 'real target', ev.target);
+            const target = ev.detail;
+
+            const msg = document.createElement('li');
+            msg.textContent = format(ev.detail);
+            if (ev.target !== ev.detail) {
+                msg.innerHTML += ` <em>${format(ev.target)}</em>`;
+            }
+            log.insertBefore(msg, log.firstElementChild);
+
+            window.setTimeout(_ => msg.remove(), 2500);
+        });
+
+        const root = div.attachShadow({
+            mode: 'open'
+        });
+        root.appendChild(t.content.cloneNode(true));
+
+        const root2 = root.getElementById('internal').attachShadow({
+            mode: 'open'
+        });
+        root2.appendChild(t2.content.cloneNode(true));
+
+        function format(el) {
+            let out = '';
+            if (el) {
+                out += el.localName;
+                if (el.id) {
+                    out += '#' + el.id;
+                }
+                if (el.className) {
+                    out += '.' + el.className;
+                }
+            }
+            return out;
+        }
+    </script>
+
+
+
+</body>
+
+</html>
