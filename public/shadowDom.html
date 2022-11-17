@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-        ShadowDom Example
+        Shadow DOM Example
     </title>
     <link rel="shortcut icon" href="/images/marketing/favicon.png" type="image/x-icon" />
 
@@ -57,9 +57,11 @@
     <script src="./assets/scripts/heapShadowDom.js"></script>
 
     <p>
-        This is a simple Shadow DOM example which highlights that Heap can effectively capture ShadowDom events, as described in this <a id="link" href="https://community.heap.io/defining-events-and-properties-40/tracking-events-in-web-components-shadow-dom-262" target="_blank">Heap blog article</a>.<br><br>
-        There are 2 Shadow DOM nodes: <b><font color="rgb(0, 255, 0)">red</font></b> being the 1st node, and <b><font color="rgb(255, 0, 0)">green</font></b> being the 2nd node (which is appended to the 1st).<br><br>
-        Elements that are not Shadow DOM elements (i.e. Light DOM elements) are highlighted in <span class="blue">blue</span>. 
+        This is a simple <a id="link" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM" target="_blank">Shadow DOM</a> example which highlights that Heap can effectively capture ShadowDom events, as described in this <a id="link" href="https://community.heap.io/defining-events-and-properties-40/tracking-events-in-web-components-shadow-dom-262" target="_blank">Heap blog article</a>.<br><br>
+        <img src="./images/shadowDom/mozilla_shadowDom.png" width="800"><br><br>
+        There are 2 Shadow DOM nodes below: <b><font color="rgb(0, 255, 0)">red</font></b> being the 1st node, and <b><font color="rgb(255, 0, 0)">green</font></b> being the 2nd node (which is appended to the 1st).<br><br>
+        Elements that are not Shadow DOM elements (i.e. Light DOM elements) are highlighted in <span class="blue">blue</span>.<br><br><br>
+        Interact with the input fields below, and watch the resulting data in the Heap "Live data feed" view:
     </p>
 
     <div id="div">
@@ -84,8 +86,9 @@
         <input id="shadowDom1_element2" placeholder="shadowDom1_element2" size="25"/>
         <div id="internal"></div>
     </template>
+
     <template id="t2">
-        <h2>Shadow Dom Node #2 (Inside Node #1)</h2>
+        <h2>Shadow Dom Node #2</h2>
         <style>
             h2 {
                 font: inherit;
@@ -101,9 +104,6 @@
         <input id="shadowDom2_element2" placeholder="shadowDom2_element2" size="25"/>
     </template><br>
     <input id="lightDom_element2" placeholder="lightDom_element2" size="25" />
-
-    <!-- <h2>List of recently focused nodes</h2>
-    <ul id="log"></ul> -->
 
     <script>
         // Code to  create Shadow Dom nodes on the page
@@ -122,19 +122,6 @@
         });
         root2.appendChild(t2.content.cloneNode(true));
 
-        // function format(el) {
-        //     let out = '';
-        //     if (el) {
-        //         out += el.localName;
-        //         if (el.id) {
-        //             out += '#' + el.id;
-        //         }
-        //         if (el.className) {
-        //             out += '.' + el.className;
-        //         }
-        //     }
-        //     return out;
-        // }
     </script>
 
 </body>
