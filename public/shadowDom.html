@@ -18,11 +18,11 @@
         }
 
         input {
-            border: 1px solid blue
+            border: 3px solid blue
         }
 
         .blue {
-            border: 1px solid blue;
+            border: 3px solid blue;
         }
 
         li em {
@@ -58,12 +58,12 @@
 
     <p>
         This is a simple Shadow DOM example which highlights that Heap can effectively capture ShadowDom events, as described in this <a id="link" href="https://community.heap.io/defining-events-and-properties-40/tracking-events-in-web-components-shadow-dom-262" target="_blank">Heap blog article</a>.<br><br>
-        There are 2 Shadow DOM nodes: red being the first node, and green being the 2nd node (which is instantiated from within the 1st).<br>
-        Elements that are are not a Shadow DOM element are highlighted in <span class="blue">blue</span> and identified as "Light DOM" (ex: "Light DOM one" & "Light DOM two").
+        There are 2 Shadow DOM nodes: <b><font color="rgb(0, 255, 0)">red</font></b> being the 1st node, and <b><font color="rgb(255, 0, 0)">green</font></b> being the 2nd node (which is appended to the 1st).<br><br>
+        Elements that are not Shadow DOM elements are highlighted in <span class="blue">blue</span> and identified as "Light DOM" (ex: "Light DOM one" & "Light DOM two").
     </p>
 
     <div id="div">
-        <input placeholder="Light DOM one" id="light_dom" />
+        <input placeholder="lightDom_element1" id="lightDom_element1" size="25"/>
     </div>
 
     <template id="t">
@@ -79,9 +79,9 @@
                 padding: 12px;
             }
         </style>
-        <input id="one" placeholder="Shadow DOM one" />
+        <input id="shadowDom1_element1" placeholder="shadowDom1_element1" size="25"/>
         <slot></slot>
-        <input id="two" placeholder="Shadow DOM two" />
+        <input id="shadowDom1_element2" placeholder="shadowDom1_element2" size="25"/>
         <div id="internal"></div>
     </template>
     <template id="t2">
@@ -97,10 +97,10 @@
                 padding: 12px;
             }
         </style>
-        <input id="sub-one" placeholder="Shadow DOM sub-one" />
-        <input id="sub-two" placeholder="Shadow DOM sub-two" />
+        <input id="shadowDom2_element1" placeholder="shadowDom2_element1" size="25">
+        <input id="shadowDom2_element2" placeholder="shadowDom2_element2" size="25"/>
     </template><br>
-    <input id="other" placeholder="Light DOM two" size="40" />
+    <input id="lightDom_element2" placeholder="lightDom_element2" size="25" />
 
     <!-- <h2>List of recently focused nodes</h2>
     <ul id="log"></ul> -->
@@ -122,19 +122,19 @@
         });
         root2.appendChild(t2.content.cloneNode(true));
 
-        function format(el) {
-            let out = '';
-            if (el) {
-                out += el.localName;
-                if (el.id) {
-                    out += '#' + el.id;
-                }
-                if (el.className) {
-                    out += '.' + el.className;
-                }
-            }
-            return out;
-        }
+        // function format(el) {
+        //     let out = '';
+        //     if (el) {
+        //         out += el.localName;
+        //         if (el.id) {
+        //             out += '#' + el.id;
+        //         }
+        //         if (el.className) {
+        //             out += '.' + el.className;
+        //         }
+        //     }
+        //     return out;
+        // }
     </script>
 
 </body>
