@@ -105,8 +105,8 @@
     </template>
     <input id="other" placeholder="outside" />
 
-    <!-- <h2>List of recently focused nodes</h2>
-    <ul id="log"></ul> -->
+    <h2>List of recently focused nodes</h2>
+    <ul id="log"></ul>
 
     <script>
         if (!div.attachShadow) {
@@ -115,7 +115,7 @@
         }
 
         // This line adds the helper library. It then generates `-shadow-focus` events, which can be listened to...
-        //document.addEventListener('focus', shadowFocusHandler, true);
+        document.addEventListener('focus', shadowFocusHandler, true);
 
         // ... here! The `ev.detail` message
         document.addEventListener('-shadow-focus', function(ev) {
