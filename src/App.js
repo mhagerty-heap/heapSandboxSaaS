@@ -36,6 +36,9 @@ import TimelineDemo from './pages/TimelineDemo';
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
 
+import DragNDrop from './components/DragNDrop';
+
+
 import 'primereact/resources/primereact.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
@@ -287,6 +290,7 @@ const App = () => {
         'layout-theme-light': layoutColorMode === 'light'
     });
 
+
     return (
         <div className={wrapperClass} onClick={onWrapperClick}>
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
@@ -323,6 +327,7 @@ const App = () => {
                     <Route path="/crud" component={Crud} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
+                    <Route path="/dragndrop" component={DragNDrop} />
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />
