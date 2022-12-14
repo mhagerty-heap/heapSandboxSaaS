@@ -115,7 +115,9 @@ const DragNDrop = () => {
 
     return (
       <div className="card">
-        <h5>Drag-n-Drop (Open Dev Console for Drag Data)</h5>
+        <h5>Drag-n-Drop</h5>
+        <h6>Drag items between columns. Add new columns with "Add new group". Add new items with "Add new item".</h6>
+        <h6>Open your browser console to see debug messages related to items being dropped (ex: which column they were dropped in, and which placement within the column)</h6>
         <button
           type="button"
           onClick={() => {
