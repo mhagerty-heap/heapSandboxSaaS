@@ -20,61 +20,6 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NTJMWV5');</script>
     <!-- End Google Tag Manager -->
-    
-
-    <!-- <script type="text/javascript">
-        window.heap = window.heap || [], heap.load = function(e, t) {
-            window.heap.appid = e, window.heap.config = t = t || {};
-            var r = document.createElement("script");
-            r.type = "text/javascript", r.async = !0, r.src = "https://cdn.heapanalytics.com/js/heap-" + e + ".js";
-            var a = document.getElementsByTagName("script")[0];
-            a.parentNode.insertBefore(r, a);
-            for (var n = function(e) {
-                    return function() {
-                        heap.push([e].concat(Array.prototype.slice.call(arguments, 0)))
-                    }
-                }, p = ["addEventProperties", "addUserProperties", "clearEventProperties", "identify", "resetIdentity", "removeEventProperty", "setEventProperties", "track", "unsetEventProperty"], o = 0; o < p.length; o++) heap[p[o]] = n(p[o])
-        };
-        heap.load("%REACT_APP_HEAP_APPID%");
-    </script>
-
-    <script data-cfasync="false" charset="utf-8">
-        ;
-        ! function(a) {
-            a.aurycReadyCb = a.aurycReadyCb || [], a.auryc = a.auryc || [];
-            a.aurycEventPropertiesCb = a.aurycEventPropertiesCb || [];
-            var e = document,
-                r = e.createElement("script"),
-                t = e.head || e.getElementsByTagName("head")[0],
-                c = {
-                    src: "https://cdn.auryc.com/1562-heap-sandbox-saasvercelapp/container.js",
-                    "data-cfasync": "false",
-                    async: "true",
-                    "data-vendor": "auryc",
-                    "data-role": "container",
-                    charset: "utf-8"
-                };
-            for (var d in c) r.setAttribute(d, c[d]);
-            t.appendChild(r);
-            for (var n = ["track", "identify", "addFBCustomData", "addUserProperties", "addSessionProperties", "addInternalSessionProperties", "getReplayUrl", "setFeedbackEnabled", "clearUserCookie", "addFBSubmitHandler", "addFBCancelHandler",
-                    "addEventProperties", "removeEventProperty", "removeAllEventProperties", "pause", "resume"
-                ], u = function(e) {
-                    return function() {
-                        var r = Array.prototype.slice.call(arguments, 0);
-                        if (e === "addEventProperties" || e === "removeEventProperty" || e === "removeAllEventProperties") {
-                            a.aurycEventPropertiesCb.push(function() {
-                                a.auryc[e] && a.auryc[e].apply(a.auryc, r)
-                            })
-                        } else {
-                            a.aurycReadyCb.push(function() {
-                                a.auryc[e] && a.auryc[e].apply(a.auryc, r)
-                            })
-                        }
-                    }
-                }, s = 0; s < n.length; s++) a.auryc[n[s]] = u(n[s])
-        }(window);
-    </script> -->
-
 </head>
 
 <body>
@@ -88,5 +33,17 @@
         </div>
     </div>
 </body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  window.dataLayer.push({
+    'pageTitle': document.title,
+    'pageReferrer': document.referrer,
+    'pageDomain': document.domain,
+    'windowWidth': window.innerWidth,
+    'windowHeight': window.innerHeight
+  });
+}, false);
+</script>
 
 </html>
