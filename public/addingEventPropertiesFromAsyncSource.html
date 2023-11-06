@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Adding Event Properties from an Asynchronous Source</title>
+  <script type="text/javascript">
+    window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
+    heap.load("527942070");
+  </script>
+</head>
+<body>
+<h1>Adding Event Properties from an Asynchronous Source</h1>
+
+<p>This page will 1) load, 2) load 3rd party properties (cty/state data) from Mockaroo, and then 3) send the Heap Event with the associated properties</p>
+Mockaroo Data can be found <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">here</a><br><br>
+<hi><b>Open your console to see this in action</b></h1>
+
+<script>
+
+// async function fetchProperties() {
+//
+//   // API for get requests
+//   let fetchRes = fetch(
+//   "https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760");
+//   // fetchRes is the promise to resolve
+//   // it by using.then() method
+//   fetchRes.then(res =>
+//       res.json()).then(d => {
+//           console.log(d)
+//       })
+// }
+
+const adapterName = 'asyncSourcePropertiesAdapter';
+
+const addAdditionalPropertiesFromAsyncSource = async () => {
+  let properties;
+  const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760') //fetch data from mockaroo
+  properties = await res.json(); // set json to properties variable
+  console.log('properties loaded into browser =');
+  console.log(properties) // print out the properties, to be handed to Heap Event
+
+  // const properties = await fetchProperties();
+  heap.addEventProperties(properties);
+  console.log("properties sent to Heap")
+  heap.markAdapterAsResolved(adapterName);
+  console.log("Heap Adaptor marked resolved")
+}
+
+const adapter = { name: adapterName, fn: addAdditionalPropertiesFromAsyncSource };
+const config = { isBlocking: true, blockDurationInMs: 5000 };
+
+heap.addAdapter(adapter, config);
+</script>
+
+
+</body>
+</html>
