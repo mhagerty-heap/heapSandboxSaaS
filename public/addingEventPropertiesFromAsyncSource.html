@@ -19,40 +19,26 @@ The Mockaroo request can be initiated here <a href="https://my.api.mockaroo.com/
 <hi><b>Open your console to see the commented action, open the network tab to check the resulting Heap "track" request made after 5 seconds, and view the HTML source to see the commented code</b></h1>
 
 <script>
-
-// async function fetchProperties() {
-//
-//   // API for get requests
-//   let fetchRes = fetch(
-//   "https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760");
-//   // fetchRes is the promise to resolve
-//   // it by using.then() method
-//   fetchRes.then(res =>
-//       res.json()).then(d => {
-//           console.log(d)
-//       })
-// }
-
 const adapterName = 'asyncSourcePropertiesAdapter';
 
 const addAdditionalPropertiesFromAsyncSource = async () => {
-  let properties;
+  let properties; // create properties variable
   const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760') //fetch data from mockaroo
   properties = await res.json(); // set json to properties variable
-  console.log('properties loaded into browser =');
+  console.log('3rd-party properties loaded into browser =');
   console.log(properties) // print out the properties, to be handed to Heap Event
 
   // const properties = await fetchProperties();
   heap.addEventProperties(properties);
-  console.log("properties sent to Heap")
+  console.log("heap.addEventProperties sent with properties")
   heap.markAdapterAsResolved(adapterName);
   console.log("Heap Adaptor marked resolved")
 }
 
-const adapter = { name: adapterName, fn: addAdditionalPropertiesFromAsyncSource };
-const config = { isBlocking: true, blockDurationInMs: 5000 };
+const adapter = { name: adapterName, fn: addAdditionalPropertiesFromAsyncSource }; // initialize adaptor object
+const config = { isBlocking: true, blockDurationInMs: 5000 }; // set config for adaptor object
 
-heap.addAdapter(adapter, config);
+heap.addAdapter(adapter, config); // start the Heap adaptor
 </script>
 
 
