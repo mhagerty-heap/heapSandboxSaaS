@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Adding Event Properties from an Asynchronous Source</title>
+  <title>HeapJS5: Adding Event Properties from an Asynchronous Source</title>
   <script type="text/javascript">
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
     heap.load("527942070");
   </script>
 </head>
 <body>
-<h1>Adding Event Properties from an Asynchronous Source</h1>
+<h1>HeapJS5: Adding Event Properties from an Asynchronous Source</h1>
 
 <p>Heap Adaptors can allow us to wait for asynchronous data to load from a 3rd party location prior to sending the event to Heap.  This example will:<br>
 <br>1) Load the page<br>
