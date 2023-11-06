@@ -10,9 +10,13 @@
 <body>
 <h1>Adding Event Properties from an Asynchronous Source</h1>
 
-<p>This page will 1) load, 2) load 3rd party properties (cty/state data) from Mockaroo, and then 3) send the Heap Event with the associated properties</p>
-Mockaroo Data can be found <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">here</a><br><br>
-<hi><b>Open your console to see this in action</b></h1>
+<p>Heap Adaptors can allow us to wait for asynchronous data to load from a 3rd party location prior to sending the event to Heap.  This example will:<br>
+<br>1) Load the page<br>
+<br>2) Wait 5 seconds while 3rd-party properties (asyncEventPropertyCity/asyncEventPropertyState) are retrieved from a mock API endpoint<br>
+<br>3) Send the event data with the retrieved properties to Heap when the 5 seconds have expired</p><br>
+
+The Mockaroo request can be initiated here <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">here</a><br><br>
+<hi><b>Open your console to see the commented action, open the network tab to check the resulting Heap "track" request made after 5 seconds, and view the HTML source to see the commented code</b></h1>
 
 <script>
 
