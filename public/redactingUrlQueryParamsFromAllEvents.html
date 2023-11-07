@@ -14,19 +14,16 @@
         try {
           // Event is a pageview event
           if (message.type === 'meta_pageview') {
-            console.log("meta_pageview");
             message.data.pageview_info.url.query = '****';
           }
 
           // Event is a session event
           if (message.type === 'meta_session') {
-            console.log("meta_session");
             message.data.initial_pageview_info.url.query = '****';
           }
 
           // Event is a user event
           if (message.type === 'meta_user') {
-            console.log("meta_user");
             message.data.initial_session_info.initial_pageview_info.url.query = '****';
           }
 
@@ -49,7 +46,9 @@
 
 <body>
 <h1>HeapJS5: Redacting URL Query Params From All Events</h1>
-<p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This example:<br>
-<br>1) Loads this page (ensure to have query params appended at the end of the URL. ex: test1=abc&test2=def)<br>
+<p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  Use this example by:<br>
+<br>1) Loading this page with query parameters(ensure to have query params appended at the end of the URL. ex: test1=abc&test2=def)<br>
+<br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
+<img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
 </body>
 </html>
