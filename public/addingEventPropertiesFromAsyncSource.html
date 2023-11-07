@@ -13,14 +13,16 @@
 <p>A Heap Adaptor can be utilized to wait for asynchronous data to load from a 3rd party location prior to sending the event to Heap.  This example will:<br>
 <br>1) Load the page<br>
 <br>2) Wait 5 seconds while 3rd-party properties (asyncEventPropertyCity/asyncEventPropertyState) are retrieved from a mock API endpoint<br>
-<br>3) Send the event data with the retrieved properties to Heap when 5 seconds have expired</p><br>
+<br>3) Send the pageview event data with the retrieved properties to Heap when 5 seconds have expired</p><br>
 
-The Mockaroo request can reviewed <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">here</a><br><br>
-<hi><b>Open your console to see the commented action, open the network tab to check the resulting Heap "track" request made after 5 seconds, and view the HTML source to see the commented code</b></h1><br><br>
-
+A Mockaroo request can be reviewed <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">here</a><br><br>
+<hi><b>Open the browser console to see commented action (you can also view the commented HTML code to see how this works)</b></h1><br>
 <img src="./images/heapjs5/asyncSourceConsole.png" width="300" alt="Console Messages"><br><br>
 
-<img src="./images/heapjs5/asyncSourceConsoleNetwork.png" width="700" alt="Network Tab"><br>
+<hi><b>Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by 5 seconds)</b></h1><br>
+<img src="./images/heapjs5/asyncSourceLiveView.png" width="750" alt="Console Messages"><br>
+
+<!-- <img src="./images/heapjs5/asyncSourceConsoleNetwork.png" width="700" alt="Network Tab"><br> -->
 
 <script>
 const adapterName = 'asyncSourcePropertiesAdapter';
