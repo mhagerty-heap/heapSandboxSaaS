@@ -13,14 +13,6 @@
 <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This example:<br>
 <br>1) Loads this page (ensure to have query params appended at the end of the URL. ex: test1=abc&test2=def)<br>
 
-<!-- <hi><b>Open the browser console to see commented action (you can also view the commented HTML code to see how this works)</b></h1><br>
-<img src="./images/heapjs5/asyncSourceConsole.png" width="300" alt="Console Messages"><br><br>
-
-<hi><b>Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by 5 seconds)</b></h1><br>
-<img src="./images/heapjs5/asyncSourceLiveView.png" width="750" alt="Console Messages"><br> -->
-
-
-
 <script>
 const transformerName = 'redactUrlQueryFromAllEventsTransformer';
 const transformerFn = (messages: Array<EventMessage>): Array<EventMessage> => {
