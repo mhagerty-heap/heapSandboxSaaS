@@ -18,11 +18,11 @@
       console.log("Is the user in Europe based on fetched data? " + window.isUserInEurope.value)
       if (window.isUserInEurope.value == 'yes') {
         console.log('The target text WILL be redacted');
-        document.getElementById("redactedText").innerHTML = "Customer IS in Europe, so target text WILL be redacted";
+        document.getElementById("redactedText").innerHTML = "Customer IS in Europe, so target text from button click below WILL be redacted";
 
       } else {
         console.log('The target text will NOT be redacted');
-        document.getElementById("nonRedactedText").innerHTML = "Customer is NOT in Europe, so target text will NOT be redacted";
+        document.getElementById("nonRedactedText").innerHTML = "Customer is NOT in Europe, so target text from button click below will NOT be redacted";
 
       };
       heap.markAdapterAsResolved(adapterName);
