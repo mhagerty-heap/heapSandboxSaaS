@@ -7,56 +7,46 @@
     //heap.load("527942070");
     heap.load("527942070", { logLevel: 'trace' });
   </script>
-
-
-
 </head>
-
 <body>
-<h1>HeapJS5: Redacting URL Query Params From All Events</h1>
-<p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters.<br><br> To use this example:<br>
-<br>1) Load this page with query parameters (ex: ?test1=ABDC&test2=WXYZ). The params used in the URL will be shown below:<br>
-<div id="content">
-<p id="paramValues" style="color:green"></p>
-</div>
-<br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
-<img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
+  <h1>HeapJS5: Redacting URL Query Params From All Events</h1>
+  <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters.<br><br> To use this example:<br>
+  <br>1) Load this page with query parameters (ex: ?test1=ABDC&test2=WXYZ). The params used in the URL will be shown below:<br>
+  <div id="content">
+  <p id="paramValues" style="color:green"></p>
+  </div>
+  <br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
+  <img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
+  <script type="text/javascript">
+    document.getElementById("paramValues").innerHTML = "Param Values = " + window.location.search; // print query param values to the page
+    const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
+    const transformerName = 'redactUrlQueryFromAllEventsTransformer';  // define the transformation name
+    const transformerFn = (messages) => { // define the transformation function, accepting heap messages as an argument
+      const redactUrlQuery = (message) => {  // iterate through each message
+        try {
+          // Event is a pageview event
+          if (message.type === 'meta_pageview') { // is the message a pageview type?
+            message.data.pageview_info.url.query = '****'; // redact the pageview url query value
+          }
 
-<script type="text/javascript">
-  document.getElementById("paramValues").innerHTML = "Param Values = " + window.location.search;
-  const transformerName = 'redactUrlQueryFromAllEventsTransformer';
-  const transformerFn = (messages) => {
-    const redactUrlQuery = (message) => {
-      try {
-        // Event is a pageview event
-        if (message.type === 'meta_pageview') {
-          message.data.pageview_info.url.query = '****';
+          // Event is a session event
+          if (message.type === 'meta_session') { // is the message a session type?
+            message.data.initial_pageview_info.url.query = '****'; // redact the session url query value
+          }
+
+          // Event is a user event
+          if (message.type === 'meta_user') { // if the message a user type?
+            message.data.initial_session_info.initial_pageview_info.url.query = '****'; // redact the user url query value
+          }
+
+          return message; // return the redacted message to transformerFn
+        } catch (e) {
+          return message; // return any error message
         }
-
-        // Event is a session event
-        if (message.type === 'meta_session') {
-          message.data.initial_pageview_info.url.query = '****';
-        }
-
-        // Event is a user event
-        if (message.type === 'meta_user') {
-          message.data.initial_session_info.initial_pageview_info.url.query = '****';
-        }
-
-        return message;
-      } catch (e) {
-        return message;
       }
+      return messages.map(redactUrlQuery); // return/map the redacted messages to the Heap message array
     }
-
-    return messages.map(redactUrlQuery);
-  }
-
-  // Using metadata pipeline since we are modifying user, session, and pageview messages
-  //const pipeline = 'metadata';
-
-  heap.addTransformerFn(transformerName, transformerFn, 'metadata');
-</script>
-
+    heap.addTransformerFn(transformerName, transformerFn, pipeline);
+  </script>
 </body>
 </html>

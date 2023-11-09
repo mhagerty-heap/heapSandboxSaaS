@@ -1,47 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users
-</title>
-  <script type="text/javascript">
+  <title>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</title>
+  <script type="text/javascript"> // heap script
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
     heap.load("527942070");
     //heap.load("527942070", { logLevel: 'trace' });
   </script>
 
-  <script type="text/javascript">
+  <script type="text/javascript"> // adaptor and transformation script
     // Create adapter to set state on whether user is from Europe
-    const adapterName = 'isUserInEuropeAdapter';
-    const isUserInEurope = async () => {
+    const adapterName = 'isUserInEuropeAdapter'; // set adaptor name
+    const isUserInEurope = async () => { // set adaptor function
       const isUserInEurope = await fetch('https://my.api.mockaroo.com/heapJs5RedactTextEuropeanUser.json?key=17612760') //fetch data from mockaroo
-      window.isUserInEurope = await isUserInEurope.json(); //get JSON from response object
+      window.isUserInEurope = await isUserInEurope.json(); //get JSON from response object and set to window.isUserInEurope
       console.log("Is the user in Europe based on fetched data? " + window.isUserInEurope.value)
       if (window.isUserInEurope.value == 'yes') {
         console.log('The target text WILL be redacted');
         document.getElementById("redactedText").innerHTML = "Customer IS in Europe, so target text from button click below WILL be redacted";
-
       } else {
         console.log('The target text will NOT be redacted');
         document.getElementById("nonRedactedText").innerHTML = "Customer is NOT in Europe, so target text from button click below will NOT be redacted";
-
       };
-      heap.markAdapterAsResolved(adapterName);
+      heap.markAdapterAsResolved(adapterName); // mark adaptor as resolved
     }
     // Defaults to 5 seconds of blocking
-    const config = { isBlocking: true, blockDurationInMs: 5000 };
-    heap.addAdapter({ name: adapterName, fn: isUserInEurope }, config);
+    const config = { isBlocking: true, blockDurationInMs: 5000 }; // set config for adaptor
+    heap.addAdapter({ name: adapterName, fn: isUserInEurope }, config); // call adaptor
 
     // Create transformer to redact target text from users in Europe
-    const transformerName = 'redactTargetTextForUsersInEuropeTransformer';
-    const transformerFn = (messages) => {
-      if (window.isUserInEurope.value == 'no') {
-        return messages;
+    const transformerName = 'redactTargetTextForUsersInEuropeTransformer'; // set tranformer name
+    const transformerFn = (messages) => {  // transformer function
+      if (window.isUserInEurope.value == 'no') { // is user in Europe based on returned data?
+        return messages; // don't redact anything...return the messages as is
       }
-
-
-      const redactTargetTextForUsersInEurope = (message) => {
+      const redactTargetTextForUsersInEurope = (message) => { // iterate through all messages
         try {
-          // Check if message is an interaction event before redactiong
+          // Check if message is an interaction event before redacting
           if (message.data.event.interaction) {
             message.data.event.interaction.nodes[0].targetText = '****';
           }
@@ -51,32 +46,24 @@
           return message;
         }
       }
-
-
-
-      return messages.map(redactTargetTextForUsersInEurope);
+      return messages.map(redactTargetTextForUsersInEurope); // return/map redacted (or not) messages to Heap messages
     }
-
-    // Using default general pipeline since we are modifying track events
-    heap.addTransformerFn(transformerName, transformerFn);
+    heap.addTransformerFn(transformerName, transformerFn); // Using default general pipeline since we are modifying track events
   </script>
-
 </head>
 
 <body>
-<h1>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</h1>
-<p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call a mock API to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
-<br>Use this example by:<br>
-<br>1) Loading this page (the status of the customer will be returned below)<br>
-<div id="returnValueDiv">
-<p id="redactedText" style="color:green"></p>
-<p id="nonRedactedText" style="color:red"></p>
-</div>
-<br>2) Click the Button below to create a Heap click event<br><br>
-<button id="testbutton">Button Target Text</button><br>
-<br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe<br><br>
-
-
-<img src="./images/heapjs5/redactingTargetTextEuropeanUsersLiveView.png" width="750" alt="Live data feed"><br>
+  <h1>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</h1>
+  <p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call a mock API to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
+  <br>Use this example by:<br>
+  <br>1) Loading this page (the status of the customer will be returned below)<br>
+  <div id="returnValueDiv">
+    <p id="redactedText" style="color:green"></p>
+    <p id="nonRedactedText" style="color:red"></p>
+  </div>
+  <br>2) Click the Button below to create a Heap click event<br><br>
+  <button id="testbutton">Button Target Text</button><br>
+  <br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe<br><br>
+  <img src="./images/heapjs5/redactingTargetTextEuropeanUsersLiveView.png" width="750" alt="Live data feed"><br>
 </body>
 </html>

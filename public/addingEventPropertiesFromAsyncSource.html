@@ -8,44 +8,35 @@
   </script>
 </head>
 <body>
-<h1>HeapJS5: Adding Event Properties from an Asynchronous Source</h1>
-
-<p>A Heap Adaptor can be utilized to wait for asynchronous data to load from a 3rd party location prior to sending the event to Heap. This example waits up to 5 seconds while 3rd-party properties (city/state) are retrieved from <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">a mock API endpoint</a>.  To use this example:<br>
-<br>1) Load this page (the returned data from the API will appear below)<br>
-<div id="returnValueDiv">
-<p id="returnedCity" style="color:green"></p>
-<p id="returnedState" style="color:green"></p>
-<p id="heapTrackCall" style="color:blue"></p>
-</div>
-<br>2) Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by 5 seconds)<br>
-<img src="./images/heapjs5/asyncSourceLiveView.png" width="750" alt="Console Messages"><br>
-
-<!-- <img src="./images/heapjs5/asyncSourceConsoleNetwork.png" width="700" alt="Network Tab"><br> -->
-
-<script>
-const adapterName = 'asyncSourcePropertiesAdapter';
-
-const addAdditionalPropertiesFromAsyncSource = async () => {
-  let properties; // create properties variable
-  const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760') //fetch data from mockaroo
-  properties = await res.json(); // set json to properties variable
-  console.log('3rd-party properties loaded into browser =');
-  console.log(properties) // print out the properties, to be handed to Heap Event
-  document.getElementById("returnedCity").innerHTML = "Customer City = " + properties.asyncEventPropertyCity;
-  document.getElementById("returnedState").innerHTML = "Customer State = " + properties.asyncEventPropertyState;
-  heap.addEventProperties(properties);  // call heap.addEventProperties
-  document.getElementById("heapTrackCall").innerHTML = "Heap Track Call with Properties Executed";
-  console.log("heap.addEventProperties sent with properties")
-  heap.markAdapterAsResolved(adapterName);  // mark adaptor as resolved
-  console.log("Heap Adaptor marked resolved")
-}
-
-const adapter = { name: adapterName, fn: addAdditionalPropertiesFromAsyncSource }; // initialize adaptor object
-const config = { isBlocking: true, blockDurationInMs: 5000 }; // set config for adaptor object
-
-heap.addAdapter(adapter, config); // start the Heap adaptor
-</script>
-
-
+  <h1>HeapJS5: Adding Event Properties from an Asynchronous Source</h1>
+  <p>A Heap Adaptor can be utilized to wait for asynchronous data to load from a 3rd party location prior to sending the event to Heap. This example waits up to 5 seconds while 3rd-party properties (city/state) are retrieved from <a href="https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760">a mock API endpoint</a>.  To use this example:<br>
+  <br>1) Load this page (the returned data from the API will appear below)<br>
+  <div id="returnValueDiv">
+  <p id="returnedCity" style="color:green"></p> <!-- where the return city will appear-->
+  <p id="returnedState" style="color:green"></p> <!-- where the return state will appear-->
+  <p id="heapTrackCall" style="color:blue"></p> <!-- where the status of the Heap track call will appear-->
+  </div>
+  <br>2) Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by 5 seconds)<br>
+  <img src="./images/heapjs5/asyncSourceLiveView.png" width="750" alt="Console Messages"><br>
+  <script>
+    const adapterName = 'asyncSourcePropertiesAdapter'; // define adaptor name
+    const addAdditionalPropertiesFromAsyncSource = async () => {  //define adaptor code to retrieve data
+      let properties; // create properties variable
+      const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760') //fetch data from mockaroo
+      properties = await res.json(); // set json to properties variable
+      console.log('3rd-party properties loaded into browser =');
+      console.log(properties) // print out the properties, to be handed to Heap Event
+      document.getElementById("returnedCity").innerHTML = "Customer City = " + properties.asyncEventPropertyCity; // set readable text on page
+      document.getElementById("returnedState").innerHTML = "Customer State = " + properties.asyncEventPropertyState; // set readable text on page
+      heap.addEventProperties(properties);  // call heap.addEventProperties
+      document.getElementById("heapTrackCall").innerHTML = "Heap Track Call with Properties Executed"; // set readable text on page
+      console.log("heap.addEventProperties sent with properties")
+      heap.markAdapterAsResolved(adapterName);  // mark adaptor as resolved
+      console.log("Heap Adaptor marked resolved")
+    }
+    const adapter = { name: adapterName, fn: addAdditionalPropertiesFromAsyncSource }; // initialize adaptor object with adaptor name and adaptor function
+    const config = { isBlocking: true, blockDurationInMs: 5000 }; // set config for adaptor object
+    heap.addAdapter(adapter, config); // start the Heap adaptor
+  </script>
 </body>
 </html>
