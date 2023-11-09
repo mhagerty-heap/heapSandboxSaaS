@@ -7,6 +7,20 @@
     heap.load("527942070");
     //heap.load("527942070", { logLevel: 'trace' });
   </script>
+</head>
+<body>
+  <h1>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</h1>
+  <p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call a mock API to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
+  <br>Use this example by:<br>
+  <br>1) Loading this page (the status of the customer will be returned below)<br>
+  <div id="returnValueDiv">
+    <p id="redactedText" style="color:green"></p>
+    <p id="nonRedactedText" style="color:red"></p>
+  </div>
+  <br>2) Click the Button below to create a Heap click event<br><br>
+  <button id="testbutton">Button Target Text</button><br>
+  <br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe<br><br>
+  <img src="./images/heapjs5/redactingTargetTextEuropeanUsersLiveView.png" width="750" alt="Live data feed"><br>
 
   <script type="text/javascript"> // adaptor and transformation script
     // Create adapter to set state on whether user is from Europe
@@ -50,20 +64,6 @@
     }
     heap.addTransformerFn(transformerName, transformerFn); // Using default general pipeline since we are modifying track events
   </script>
-</head>
 
-<body>
-  <h1>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</h1>
-  <p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call a mock API to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
-  <br>Use this example by:<br>
-  <br>1) Loading this page (the status of the customer will be returned below)<br>
-  <div id="returnValueDiv">
-    <p id="redactedText" style="color:green"></p>
-    <p id="nonRedactedText" style="color:red"></p>
-  </div>
-  <br>2) Click the Button below to create a Heap click event<br><br>
-  <button id="testbutton">Button Target Text</button><br>
-  <br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe<br><br>
-  <img src="./images/heapjs5/redactingTargetTextEuropeanUsersLiveView.png" width="750" alt="Live data feed"><br>
 </body>
 </html>
