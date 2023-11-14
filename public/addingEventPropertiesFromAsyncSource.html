@@ -28,6 +28,7 @@
       console.log(properties) // print out the properties, to be handed to Heap Event
       document.getElementById("returnedCity").innerHTML = "Customer City = " + properties.asyncEventPropertyCity; // set readable text on page
       document.getElementById("returnedState").innerHTML = "Customer State = " + properties.asyncEventPropertyState; // set readable text on page
+      heap.clearEventProperties();
       heap.addEventProperties(properties);  // call heap.addEventProperties
       document.getElementById("heapTrackCall").innerHTML = "Heap Track Call with Properties Executed"; // set readable text on page
       console.log("heap.addEventProperties sent with properties")
