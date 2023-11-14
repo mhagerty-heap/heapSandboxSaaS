@@ -18,6 +18,7 @@
   <br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
   <img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
   <script type="text/javascript">
+    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API." 
     document.getElementById("paramValues").innerHTML = "Param Values = " + window.location.search; // print query param values to the page
     const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
     const transformerName = 'redactUrlQueryFromAllEventsTransformer';  // define the transformation name

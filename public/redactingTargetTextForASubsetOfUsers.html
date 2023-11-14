@@ -43,6 +43,7 @@
     heap.addAdapter({ name: adapterName, fn: isUserInEurope }, config); // call adaptor
 
     // Create transformer to redact target text from users in Europe
+    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API." 
     const transformerName = 'redactTargetTextForUsersInEuropeTransformer'; // set tranformer name
     const transformerFn = (messages) => {  // transformer function
       if (window.isUserInEurope.value == 'no') { // is user in Europe based on returned data?
