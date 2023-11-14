@@ -5,12 +5,12 @@
   <script type="text/javascript">
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
     //heap.load("527942070");
-    heap.load("527942070", { logLevel: 'trace' });
+    heap.load("527942070", { logLevel: 'trace' }); // added trace call...check console to see the result of trace
   </script>
 </head>
 <body>
   <h1>HeapJS5: Redacting URL Query Params From All Events</h1>
-  <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters.<br><br> To use this example:<br>
+  <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters. (Pro-Tip: Check the console to see the results of adding the optional "trace" option to the heap.load function)<br><br> To use this example:<br>
   <br>1) Load this page with query parameters (ex: ?test1=ABDC&test2=WXYZ). The params used in the URL will be shown below:<br>
   <div id="content">
   <p id="paramValues" style="color:green"></p>

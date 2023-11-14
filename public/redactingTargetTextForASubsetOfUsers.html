@@ -10,16 +10,16 @@
 </head>
 <body>
   <h1>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</h1>
-  <p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call a mock API to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
+  <p>This example will redact target text on interaction track events for users that reside in Europe. This example uses a Heap Adapter to call <a href="https://my.api.mockaroo.com/heapJs5RedactTextEuropeanUser.json?key=17612760">a mock API endpoint</a> to determine whether the user is from Europe (a random yes/no value for this example). A Heap transformer then consumes that client state to determine whether to redact target text (yes = redacted, no = not redacted).<br>
   <br>Use this example by:<br>
-  <br>1) Loading this page (the status of the customer will be returned below)<br>
+  <br>1) Load this page (the status of the customer will be returned below). Reload the page a few times to test both <b style="color:green">yes (green)</b> and <b style="color:red">no (red)</b> values.<br>
   <div id="returnValueDiv">
     <p id="redactedText" style="color:green"></p>
     <p id="nonRedactedText" style="color:red"></p>
   </div>
-  <br>2) Click the Button below to create a Heap click event<br><br>
+  <br>2) Click the Button below to create a Heap click event (red value will redact "Target Text", green will not)<br><br>
   <button id="testbutton">Button Target Text</button><br>
-  <br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe<br><br>
+  <br>3) Check the Live data view within Heap to see that the target text for the associated click event has been redacted if the customer is in Europe (example below is RED)<br><br>
   <img src="./images/heapjs5/redactingTargetTextEuropeanUsersLiveView.png" width="750" alt="Live data feed"><br>
 
   <script type="text/javascript"> // adaptor and transformation script
