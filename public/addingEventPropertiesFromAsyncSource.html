@@ -16,7 +16,7 @@
   <p id="returnedState" style="color:green"></p> <!-- where the return state will appear-->
   <p id="heapTrackCall" style="color:blue"></p> <!-- where the status of the Heap track call will appear-->
   </div>
-  <br>2) Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by 5 seconds)<br>
+  <br>2) Open the Heap "Live data view" screen to review the resulting Heap "track" call associated with the pageview (which has been delayed by up to 5 seconds)<br>
   <img src="./images/heapjs5/asyncSourceLiveView.png" width="750" alt="Console Messages"><br>
   <script>
     const adapterName = 'asyncSourcePropertiesAdapter'; // define adaptor name
@@ -28,7 +28,7 @@
       console.log(properties) // print out the properties, to be handed to Heap Event
       document.getElementById("returnedCity").innerHTML = "Customer City = " + properties.asyncEventPropertyCity; // set readable text on page
       document.getElementById("returnedState").innerHTML = "Customer State = " + properties.asyncEventPropertyState; // set readable text on page
-      heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API." 
+      heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API."
       heap.addEventProperties(properties);  // call heap.addEventProperties
       document.getElementById("heapTrackCall").innerHTML = "Heap Track Call with Properties Executed"; // set readable text on page
       console.log("heap.addEventProperties sent with properties")
