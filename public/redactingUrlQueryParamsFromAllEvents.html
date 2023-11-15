@@ -10,7 +10,7 @@
 </head>
 <body>
   <h1>HeapJS5: Redacting URL Query Params From All Events</h1>
-  <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters. (Pro-Tip: Check the console to see the results of adding the optional "trace" option to the heap.load function)<br><br> To use this example:<br>
+  <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact all query parameters. <br><br>(Pro-Tip: Check the console to see the results of adding the optional "trace" option to the heap.load function)<br><br><b>To use this example:</b><br>
   <br>1) Load this page with query parameters (ex: ?test1=ABDC&test2=WXYZ). The params used in the URL will be shown below:<br>
   <div id="content">
   <p id="paramValues" style="color:green"></p>
@@ -18,7 +18,7 @@
   <br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
   <img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
   <script type="text/javascript">
-    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API." 
+    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API."
     document.getElementById("paramValues").innerHTML = "Param Values = " + window.location.search; // print query param values to the page
     const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
     const transformerName = 'redactUrlQueryFromAllEventsTransformer';  // define the transformation name
