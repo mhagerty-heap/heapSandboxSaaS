@@ -18,6 +18,7 @@
   <br>2) Open the Live data feed within Heap, and notice that the Query property has been replaced with "****"<br><br>
   <img src="./images/heapjs5/redactUrlQueryParamsLiveView.png" width="750" alt="Live data feed"><br>
   <script type="text/javascript">
+
     heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API."
     document.getElementById("paramValues").innerHTML = "Param Values = " + window.location.search; // print query param values to the page
     const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
@@ -28,16 +29,19 @@
           // Event is a pageview event
           if (message.type === 'meta_pageview') { // is the message a pageview type?
             message.data.pageview_info.url.query = '****'; // redact the pageview url query value
+            message.data.session_info.initial_pageview_info.url.query = '****'; // temp
           }
 
           // Event is a session event
           if (message.type === 'meta_session') { // is the message a session type?
             message.data.initial_pageview_info.url.query = '****'; // redact the session url query value
+            message.data.session_info.initial_pageview_info.url.query = '****'; // temp
           }
 
           // Event is a user event
           if (message.type === 'meta_user') { // if the message a user type?
             message.data.initial_session_info.initial_pageview_info.url.query = '****'; // redact the user url query value
+            message.data.session_info.initial_pageview_info.url.query = '****'; // temp 
           }
 
           return message; // return the redacted message to transformerFn
