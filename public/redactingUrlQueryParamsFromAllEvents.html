@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>HeapJS5: Redacting URL Query Params From All Events</title>
+  <link rel="shortcut icon" href="https://www.heap.io/favicon/favicon-32x32.png?v=1" type="image/x-icon" />
   <script type="text/javascript">
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
     //heap.load("527942070");
@@ -41,7 +42,7 @@
           // Event is a user event
           if (message.type === 'meta_user') { // if the message a user type?
             message.data.initial_session_info.initial_pageview_info.url.query = '****'; // redact the user url query value
-            message.data.session_info.initial_pageview_info.url.query = '****'; // temp 
+            message.data.session_info.initial_pageview_info.url.query = '****'; // temp
           }
 
           return message; // return the redacted message to transformerFn

@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>HeapJS5: Redacting Target Text on Interaction Events for a Subset of Users</title>
+  <link rel="shortcut icon" href="https://www.heap.io/favicon/favicon-32x32.png?v=1" type="image/x-icon" />
   <script type="text/javascript"> // heap script
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
     heap.load("527942070");
@@ -43,7 +44,7 @@
     heap.addAdapter({ name: adapterName, fn: isUserInEurope }, config); // call adaptor
 
     // Create transformer to redact target text from users in Europe
-    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API." 
+    heap.clearEventProperties(); // per API docs "should be called prior to calling the addEventProperties API."
     const transformerName = 'redactTargetTextForUsersInEuropeTransformer'; // set tranformer name
     const transformerFn = (messages) => {  // transformer function
       if (window.isUserInEurope.value == 'no') { // is user in Europe based on returned data?
