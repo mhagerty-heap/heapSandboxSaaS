@@ -13,10 +13,12 @@
   <h1>HeapJS5: Redacting Page Title</h1>
   <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact the Title.<br>
   <script type="text/javascript">
+
+    heap.clearEventProperties();
     const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
     const transformerName = 'redactTitle';  // define the transformation name
     const transformerFn = (messages) => { // define the transformation function, accepting heap messages as an argument
-      const redactUrlQuery = (message) => {  // iterate through each message
+      const redactTitle = (message) => {  // iterate through each message
         try {
           // Event is a pageview event
           if (message.type === 'meta_pageview') { // is the message a pageview type?
@@ -28,7 +30,7 @@
           return message; // return any error message
         }
       }
-      return messages.map(redactUrlQuery); // return/map the redacted messages to the Heap message array
+      return messages.map(redactTitle); // return/map the redacted messages to the Heap message array
     }
     heap.addTransformerFn(transformerName, transformerFn, pipeline);
   </script>
