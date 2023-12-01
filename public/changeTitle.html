@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HeapJS5: Redacting URL Query Params From All Events</title>
+  <title>HeapJS5: Redacting Page Title</title>
   <link rel="shortcut icon" href="https://www.heap.io/favicon/favicon-32x32.png?v=1" type="image/x-icon" />
   <script type="text/javascript">
     window.heapReadyCb=window.heapReadyCb||[],window.heap=window.heap||[],heap.load=function(e,t){window.heap.envId=e,window.heap.clientConfig=t=t||{},window.heap.clientConfig.shouldFetchServerConfig=!1;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src="https://sdk.us.heap-api.com/config/"+e+"/heap_config.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(a,r);var n=["init","startTracking","stopTracking","track","resetIdentity","identify","getSessionId","getUserId","getIdentity","addUserProperties","addEventProperties","removeEventProperty","clearEventProperties","addAccountProperties","addAdapter","addTransformer","addTransformerFn","onReady",],i=function(e){return function(){var t=Array.prototype.slice.call(arguments,0);window.heapReadyCb.push({name:e,fn:function(){heap[e]&&heap[e].apply(heap,t)}})}};for(let p=0;p<n.length;p++)heap[n[p]]=i(n[p])};
@@ -10,11 +10,11 @@
   </script>
 </head>
 <body>
-  <h1>HeapJS5: Redacting URL Query Params From All Events</h1>
+  <h1>HeapJS5: Redacting Page Title</h1>
   <p>A Heap Transformer can be utilized to change/redact information prior to sending the event to Heap.  This specific example will redact the Title.<br>
   <script type="text/javascript">
     const pipeline = 'metadata'; // Using metadata pipeline since we are modifying user, session, and pageview messages...used in transformer
-    const transformerName = 'redactUrlQueryFromAllEventsTransformer';  // define the transformation name
+    const transformerName = 'redactTitle';  // define the transformation name
     const transformerFn = (messages) => { // define the transformation function, accepting heap messages as an argument
       const redactUrlQuery = (message) => {  // iterate through each message
         try {
