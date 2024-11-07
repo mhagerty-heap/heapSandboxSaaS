@@ -23,7 +23,7 @@
     const adapterName = 'asyncSourcePropertiesAdapter'; // define adaptor name
     const addAdditionalPropertiesFromAsyncSource = async () => {  //define adaptor code to retrieve data
       let properties; // create properties variable
-      const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=17612760') //fetch data from mockaroo
+      const res = await fetch('https://my.api.mockaroo.com/heapJS5EventPropsCityState.json?key=3fa20c10') //fetch data from mockaroo
       properties = await res.json(); // set json to properties variable
       console.log('3rd-party properties loaded into browser =');
       console.log(properties) // print out the properties, to be handed to Heap Event

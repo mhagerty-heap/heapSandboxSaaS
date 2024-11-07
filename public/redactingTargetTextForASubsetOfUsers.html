@@ -27,7 +27,7 @@
     // Create adapter to set state on whether user is from Europe
     const adapterName = 'isUserInEuropeAdapter'; // set adaptor name
     const isUserInEurope = async () => { // set adaptor function
-      const isUserInEurope = await fetch('https://my.api.mockaroo.com/heapJs5RedactTextEuropeanUser.json?key=17612760') //fetch data from mockaroo
+      const isUserInEurope = await fetch('https://my.api.mockaroo.com/heapJs5RedactTextEuropeanUser.json?key=3fa20c10') //fetch data from mockaroo
       window.isUserInEurope = await isUserInEurope.json(); //get JSON from response object and set to window.isUserInEurope
       console.log("Is the user in Europe based on fetched data? " + window.isUserInEurope.value)
       if (window.isUserInEurope.value == 'yes') {
