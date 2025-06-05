@@ -14,7 +14,7 @@
         var imageBox = function() {
             var CSImgBox = document.createElement('img');
             CSImgBox.className = 'CSSShowCaptureImg';
-            CSImgBox.src = 'https://demo.pre-sales.fr/wp-content/uploads/2025/06/csqlogo.png';
+            CSImgBox.src = 'https://heap-sandbox-saas.vercel.app/assets/bookmarklets/csqlogo.png';
             document.querySelector('#CSShowCapture').appendChild(CSImgBox);
         }
         imageBox();
@@ -29,7 +29,7 @@
             var link = document.createElement('link');
             link.type = 'text/css';
             link.rel = 'stylesheet';
-            link.href = 'https://demo.pre-sales.fr/wp-content/uploads/custom-css-js/32734.css';
+            link.href = 'https://heap-sandbox-saas.vercel.app/assets/bookmarklets/showCaptureAndErrorStyling.css';
             head.appendChild(link);
         }
         addStyleSheet();
