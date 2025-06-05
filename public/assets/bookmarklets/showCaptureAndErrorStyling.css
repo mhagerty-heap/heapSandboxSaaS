@@ -1,0 +1,55 @@
+.CSShowCapture {
+	position: fixed;
+	width:80%;
+    left: 40px;
+    bottom: 40px;
+    height: 150px;
+    background: linear-gradient(to bottom, #020249, #5252db);
+    z-index: 1000000000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 3px;
+    padding: 10px 10px 10px 50px !important;
+    color: white !important;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: monospace;
+	  line-height: normal;
+    overflow: hidden;
+    text-align: left;
+}
+.CSSShowCaptureImg {
+	width: 60px;
+    height: auto;
+    left: -40px;
+    position: relative;
+    padding-bottom: 5px;
+}
+#CSClose {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  border-radius: 14px;
+  font-size: 19px;
+  cursor: pointer;
+}
+#CSClose:after{
+  display: inline-block;
+  content: "\00d7"; /* This will render the 'X' */
+}
+.CSHover {
+	color: #febf3c;;
+}
+.CSClick {
+	color : #fe4a66;;
+}
+.CSScroll {
+	color: white;
+}
+.CSFocus {
+	color: pink;
+}
