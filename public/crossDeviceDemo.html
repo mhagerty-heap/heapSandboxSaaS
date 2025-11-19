@@ -43,6 +43,19 @@
         iframe { border: none; width: 100%; flex-grow: 1; }
 
         /* MOBILE PHONE STYLING */
+        #mobile-section { /* New wrapper for header + mobile-wrapper */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #mobile-section .device-header { /* Style for the new mobile header */
+            margin-bottom: 10px; /* Space between header and phone frame */
+            width: 320px; /* Match phone width for alignment */
+            border-radius: 10px; /* Keep rounded corners */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
         #mobile-wrapper {
             position: relative;
             width: 320px;
@@ -127,13 +140,13 @@
 
     <div id="demo-container">
 
-        <div id="mobile-wrapper">
-            <div class="notch"></div>
-            <div class="device-header">📱 Mobile App Simulator</div>
-            <div id="mobile-screen">
-                <iframe id="mobile-iframe" src="https://heapbank.vercel.app/crossDeviceMobile.html"></iframe>
+        <div id="mobile-section"> <div class="device-header">📱 Mobile Experience</div> <div id="mobile-wrapper">
+                <div class="notch"></div>
+                <div id="mobile-screen">
+                    <iframe id="mobile-iframe" src="https://heapbank.vercel.app/crossDeviceMobile.html"></iframe>
+                </div>
+                <div class="home-button"></div>
             </div>
-            <div class="home-button"></div>
         </div>
 
         <div id="desktop-panel" class="device-panel">
@@ -183,8 +196,6 @@
                     console.log('HOST: heap.identify(' + userId + ') called on host page.');
                 }
             }
-
-            // NOTE: Removed logic for receiving anonymousIds
 
             // 2. RESPOND to Desktop's request for the Identity upon login click
             if (data.type === 'requestIdentity') {
