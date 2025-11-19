@@ -17,8 +17,10 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
+            /* FIX: Make buttons inline-block so they don't stretch */
             display: inline-block;
             min-width: 150px;
+            width: auto;
         }
 
         .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
@@ -108,11 +110,6 @@
             document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
         }
 
-        // Function to update the Identity field
-        function updateIdentityDisplay() {
-            document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
-        }
-
         // Function to reset the UI state
         function resetUI() {
             identified = false;
@@ -176,7 +173,7 @@
             }
 
             if (window.heap && userId) {
-                heap.identify(userId); // Changed to identify()
+                heap.identify(userId);
                 identified = true;
                 sharedIdentity = userId;
 

@@ -43,6 +43,19 @@
         iframe { border: none; width: 100%; flex-grow: 1; }
 
         /* MOBILE PHONE STYLING */
+        #mobile-section { /* New wrapper for header + mobile-wrapper */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #mobile-section .device-header {
+            margin-bottom: 10px;
+            width: 320px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
         #mobile-wrapper {
             position: relative;
             width: 320px;
@@ -118,46 +131,23 @@
         .controls {
             display: none;
         }
-
-        /* HOST ID DISPLAY STYLING */
-        #id-display {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e6e6ff;
-            border: 1px solid #9999ff;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
-            font-size: 0.9em;
-        }
-        #id-display p {
-            margin: 5px 0;
-            font-family: monospace;
-            background: #fff;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
     </style>
 </head>
 <body>
 
     <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
-    <p>Run this demo using a local web server (e.g., http://localhost:8000). The Host acts as the central Identity store.</p>
-
-    <div id="id-display">
-        <h3>Host Received IDs (Via postMessage Bridge)</h3>
-        <p id="mobile-data">MOBILE IDs: Waiting for data...</p>
-        <p id="desktop-data">DESKTOP IDs: Waiting for data...</p>
-    </div>
 
     <div id="demo-container">
 
-        <div id="mobile-wrapper">
-            <div class="notch"></div>
-            <div class="device-header">📱 Mobile App Simulator</div>
-            <div id="mobile-screen">
-                <iframe id="mobile-iframe" src="https://heapbank.vercel.app/crossDeviceMobile.html"></iframe>
+        <div id="mobile-section">
+            <div class="device-header">📱 Mobile Experience</div>
+            <div id="mobile-wrapper">
+                <div class="notch"></div>
+                <div id="mobile-screen">
+                    <iframe id="mobile-iframe" src="https://heapbank.vercel.app/crossDeviceMobile.html"></iframe>
+                </div>
+                <div class="home-button"></div>
             </div>
-            <div class="home-button"></div>
         </div>
 
         <div id="desktop-panel" class="device-panel">
@@ -169,16 +159,6 @@
     <script>
         // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
         let sharedIdentity = null;
-
-        // Function to update the main page with received IDs
-        function updateHostDisplay(platform, userId, sessionId) {
-            const platformElement = document.getElementById(platform + '-data');
-            if (!platformElement) return;
-
-            platformElement.innerHTML = `
-                <strong>${platform.toUpperCase()} IDs:</strong> User ID: ${userId || 'N/A'} | Session ID: ${sessionId || 'N/A'}
-            `;
-        }
 
         // Function to reset Heap identity across all three contexts
         function resetHeapIdentity() {
@@ -218,12 +198,7 @@
                 }
             }
 
-            // 2. RECEIVE ANONYMOUS IDs (PostMessage Bridge for Display)
-            if (data.type === 'anonymousIds' && data.platform && data.userId) {
-                updateHostDisplay(data.platform, data.userId, data.sessionId);
-            }
-
-            // 3. RESPOND to Desktop's request for the Identity upon login click
+            // 2. RESPOND to Desktop's request for the Identity upon login click
             if (data.type === 'requestIdentity') {
                 const desktopIframe = document.getElementById('desktop-iframe');
                 if (desktopIframe && desktopIframe.contentWindow) {
