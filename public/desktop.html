@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+      heap.load("527942070");
+    </script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; text-align: center; background-color: #f7f7f7; display: flex; flex-direction: column; justify-content: space-between; height: calc(100% - 40px); } 
+        h2 { color: #f9a000; margin-top: 0; }
+        
+        button { 
+            padding: 10px 20px; 
+            background-color: #009688; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            display: inline-block; 
+            min-width: 150px;
+        }
+
+        .data-box { background-color: #e8f0fe; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: left; font-size: 0.9em; }
+        .identified { color: green; font-weight: bold; }
+        .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
+        .note { color: #cc0000; font-style: italic; }
+        
+        /* NEW: Styling for the dedicated reset note */
+        .reset-note {
+            color: #cc0000;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            padding: 5px;
+        }
+
+        .embedded-controls { 
+            margin-top: 30px; 
+            padding: 15px; 
+            background-color: #e8f0fe; 
+            border: 1px solid #cceeff; 
+            border-radius: 8px; 
+            text-align: left; 
+            font-size: 0.85em;
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .embedded-controls h3 { 
+            margin-top: 0; 
+            color: #1a73e8; 
+            font-size: 1.1em; 
+            margin-bottom: 10px;
+        }
+        .embedded-controls ol { 
+            padding-left: 20px; 
+            margin-top: 0; 
+            line-height: 1.4;
+            list-style-position: inside;
+        }
+        .embedded-controls li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2 id='status-header'>Welcome Back (Desktop)</h2>
+    <div class="data-box">
+        <p><strong>Heap State:</strong></p>
+        <p>User ID: <span id='user-id' class='heap-id'>...</span></p>
+        <p>Session ID: <span id='session-id' class='heap-id'>...</span></p>
+        <p>Identity: <span id='identity-id' class='heap-id'>UNSET</span></p>
+    </div>
+    
+    <p id='status-text'>Action required to link identity: Please click Login after signing up on Mobile.</p>
+    <button id='login-btn'>Simulate Login</button>
+    <button id='purchase-btn' style='display:none;'>Complete Purchase (Manual Track)</button>
+
+    <div class="embedded-controls">
+        <h3>💡 Demo Steps (Observe the Identity Field)</h3>
+        
+        <p class="reset-note">NOTE: Loading or refreshing this page starts the demo with an anonymous session on all devices (Identity: UNSET).</p>
+        
+        <ol>
+            <li>In the **Mobile App** (left), click **Browse Products (Tap)**. (Anonymous event).</li>
+            <li>In the **Mobile App** (left), click **Start Sign Up** and enter an ID (e.g., <code>user@example.com</code>). The **Mobile Identity** updates. The **Desktop Identity remains UNSET.**</li>
+            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>heap.identify()</code> call, completing the stitch.</li>
+            <li>In the **Desktop Web** (right), click **Complete Purchase**. (Final identified event linked to the shared Identity).</li>
+        </ol>
+    </div>
+    
+    <script>
+        let identified = false;      
+        let sharedIdentity = null;
+        const ACCESS_BLOCKED_MSG = "Can't show for locally served demo";
+
+        // Function to safely check/display IDs
+        function displayHeapIds() {
+            try {
+                const userId = heap.getUserId();
+                const sessionId = heap.getSessionId();
+
+                if (userId && sessionId) {
+                    document.getElementById('user-id').textContent = userId;
+                    document.getElementById('session-id').textContent = sessionId;
+                    document.getElementById('identity-id').textContent = identified ? sharedIdentity : 'UNSET';
+                } else {
+                    setTimeout(displayHeapIds, 100);
+                }
+            } catch (e) {
+                document.getElementById('user-id').textContent = ACCESS_BLOCKED_MSG;
+                document.getElementById('session-id').textContent = ACCESS_BLOCKED_MSG;
+                document.getElementById('user-id').classList.add('note');
+                document.getElementById('session-id').classList.add('note');
+            }
+        }
+        
+        // Function to reset the UI state
+        function resetUI() {
+            identified = false;
+            sharedIdentity = null;
+            document.getElementById('status-header').textContent = 'Welcome Back (Desktop)';
+            document.getElementById('identity-id').textContent = 'UNSET';
+            document.getElementById('identity-id').classList.remove('identified');
+            document.getElementById('login-btn').style.display = 'inline-block';
+            document.getElementById('purchase-btn').style.display = 'none';
+            document.getElementById('login-btn').disabled = false;
+            document.getElementById('login-btn').textContent = 'Simulate Login';
+            document.getElementById('status-text').textContent = 'Action required to link identity: Please click Login after signing up on Mobile.';
+            displayHeapIds(); // Refresh IDs after reset
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initial check
+            setTimeout(displayHeapIds, 100);
+        });
+        
+        function handleLoginClick() {
+            if (identified) {
+                console.log('DESKTOP: Already identified as ' + sharedIdentity);
+                return;
+            }
+
+            window.parent.postMessage({ type: 'requestIdentity' }, '*');
+            
+            document.getElementById('login-btn').disabled = true;
+            document.getElementById('login-btn').textContent = 'Waiting for Identity...';
+        }
+
+        function simulatePurchase() {
+            if (!identified) {
+                 alert('You must log in first to complete the purchase.');
+                 return;
+            }
+            if (window.heap) {
+                heap.track('Purchase Completed', { value: 99.99, platform: 'desktop' });
+                console.log('DESKTOP: Manual event tracked: Purchase Completed.');
+            }
+            document.getElementById('status-text').innerHTML = 'Purchase Complete! The **Cross-Device Funnel** is now closed.';
+            document.getElementById('purchase-btn').disabled = true;
+        }
+
+        function completeStitch(userId) {
+            if (!userId) {
+                alert('Host page failed to provide an Identity. Did you complete the Mobile Sign Up?');
+                document.getElementById('login-btn').disabled = false;
+                document.getElementById('login-btn').textContent = 'Simulate Login';
+                return;
+            }
+            
+            if (window.heap && userId) {
+                heap.identify(userId);
+                identified = true;
+                sharedIdentity = userId;
+                
+                console.log('DESKTOP: Final identify(' + userId + ') called on this device.');
+            }
+            
+            document.getElementById('status-header').innerHTML = '✅ Identity Stitched!';
+            document.getElementById('identity-id').textContent = sharedIdentity;
+            document.getElementById('identity-id').classList.add('identified');
+            document.getElementById('status-text').innerHTML = 'The anonymous Desktop session is now linked to the Mobile session!';
+            document.getElementById('login-btn').style.display = 'none';
+            document.getElementById('purchase-btn').style.display = 'block';
+            
+            displayHeapIds(); 
+        }
+
+        document.getElementById('login-btn').addEventListener('click', handleLoginClick);
+        document.getElementById('purchase-btn').addEventListener('click', simulatePurchase);
+
+        // LISTENER FOR HOST RESET COMMAND
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            if (data.type === 'identityForLogin') {
+                completeStitch(data.userId); 
+            } else if (data.type === 'resetIdentity') {
+                if (window.heap) {
+                    heap.resetIdentity();
+                    console.log('DESKTOP: Received resetIdentity command and executed heap.resetIdentity().');
+                }
+                resetUI();
+            }
+        });
+        
+        // Execute initial reset on load to catch any stale identity cookies
+        if (window.heap) {
+            heap.resetIdentity();
+        }
+        resetUI(); // Reset UI immediately on load
+    </script>
+</body>
+</html>

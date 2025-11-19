@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Device Demo (Project 527942070)</title>
+    <script type="text/javascript">
+      window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+      heap.load("527942070");
+    </script>
+    <style>
+        /* BASE STYLES */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f9; }
+        h1 { color: #1a73e8; margin-bottom: 20px; }
+
+        /* CONTAINER: Ensures side-by-side layout */
+        #demo-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 80px; 
+            height: 680px; 
+            margin-top: 30px; 
+        } 
+        
+        /* GENERAL IFRAME PANEL STYLING */
+        .device-panel { 
+            background-color: white; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .device-header { 
+            background-color: #e8e8e8; 
+            padding: 10px; 
+            font-weight: bold; 
+            text-align: center; 
+            border-bottom: 1px solid #ddd; 
+        }
+        iframe { border: none; width: 100%; flex-grow: 1; }
+
+        /* MOBILE PHONE STYLING */
+        #mobile-wrapper { 
+            position: relative;
+            width: 320px; 
+            height: 650px; 
+            background-color: #333; 
+            border-radius: 40px; 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            padding: 40px 15px 50px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: content-box; 
+        }
+
+        /* HIDE THE IFRAME HEADER INSIDE THE PHONE FRAME */
+        #mobile-wrapper > .device-header {
+            display: none;
+        }
+
+        #mobile-screen {
+            width: 100%;
+            height: 100%;
+            background-color: white; 
+            border-radius: 20px; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .notch {
+            width: 100px;
+            height: 15px;
+            background-color: #555;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            position: absolute;
+            top: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10; 
+        }
+
+        #mobile-iframe {
+            width: 100%;
+            height: 100%;
+            background-color: white; 
+            border-radius: 15px; 
+        }
+        
+        .home-button {
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+            margin-top: 20px; 
+            border: 2px solid #666;
+            cursor: default;
+            position: absolute;
+            bottom: 5px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* DESKTOP PANEL STYLING */
+        #desktop-panel { 
+            flex-grow: 1; 
+            min-width: 600px; 
+            max-width: 900px; 
+        }
+
+        .controls { 
+            display: none; 
+        } 
+    </style>
+</head>
+<body>
+
+    <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
+    <p>Run this demo using a local web server (e.g., http://localhost:8000). The Host acts as the central Identity store.</p>
+    
+    <div id="demo-container">
+        
+        <div id="mobile-wrapper">
+            <div class="notch"></div>
+            <div class="device-header">📱 Mobile App Simulator</div> 
+            <div id="mobile-screen">
+                <iframe id="mobile-iframe" src="mobile.html"></iframe>
+            </div>
+            <div class="home-button"></div> 
+        </div>
+
+        <div id="desktop-panel" class="device-panel">
+            <div class="device-header">🖥️ Desktop Web Experience</div>
+            <iframe id="desktop-iframe" src="desktop.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
+        let sharedIdentity = null; 
+
+        // Function to reset Heap identity across all three contexts
+        function resetHeapIdentity() {
+            if (window.heap) {
+                heap.resetIdentity();
+                console.log('HOST: heap.resetIdentity() called on host page.');
+            }
+            // Send reset command to iframes
+            const resetCommand = { type: 'resetIdentity' };
+            const mobileIframe = document.getElementById('mobile-iframe');
+            const desktopIframe = document.getElementById('desktop-iframe');
+            
+            if (mobileIframe && mobileIframe.contentWindow) {
+                mobileIframe.contentWindow.postMessage(resetCommand, '*');
+            }
+            if (desktopIframe && desktopIframe.contentWindow) {
+                desktopIframe.contentWindow.postMessage(resetCommand, '*');
+            }
+            sharedIdentity = null;
+        }
+
+        // Call reset immediately on page load/reload
+        resetHeapIdentity();
+
+
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+
+            // 1. RECEIVE Identity from Mobile
+            if (data.type === 'heapIdentify' && data.userId) {
+                const userId = data.userId;
+                
+                sharedIdentity = userId;
+                console.log('HOST CONTROLLER: Identity received and stored: ' + userId);
+                
+                if (window.heap) {
+                    heap.identify(userId);
+                    console.log('HOST: heap.identify(' + userId + ') called on host page.');
+                }
+            } 
+            
+            // 2. RESPOND to Desktop's request for the Identity upon login click
+            if (data.type === 'requestIdentity') {
+                const desktopIframe = document.getElementById('desktop-iframe');
+                if (desktopIframe && desktopIframe.contentWindow && sharedIdentity) {
+                    desktopIframe.contentWindow.postMessage({ type: 'identityForLogin', userId: sharedIdentity }, '*');
+                    console.log('HOST: Sending stored Identity (' + sharedIdentity + ') back to Desktop for Login.');
+                } else {
+                    desktopIframe.contentWindow.postMessage({ type: 'identityForLogin', userId: null }, '*');
+                    console.log('HOST: Identity not yet set. Sending null back to Desktop.');
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
