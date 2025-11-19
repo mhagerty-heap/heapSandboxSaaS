@@ -21,8 +21,6 @@
             min-width: 150px;
         }
 
-        /* Removed: .data-box styles */
-
         .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
         .identified { color: green; font-weight: bold; }
         .note { color: #cc0000; font-style: italic; }
@@ -92,7 +90,7 @@
         <ol>
             <li>In the **Mobile App** (left), click **Browse Products (Tap)**. (Anonymous event).</li>
             <li>In the **Mobile App** (left), click **Start Sign Up** and enter an ID (e.g., <code>user@example.com</code>). The **Mobile Identity** updates. The **Desktop Identity remains UNSET.**</li>
-            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>heap.identify()</code> call, completing the stitch.</li>
+            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>Contentsquare.identify()</code> call, completing the stitch.</li>
             <li>In the **Desktop Web** (right), click **Complete Purchase**. (Final identified event linked to the shared Identity).</li>
         </ol>
     </div>
@@ -161,6 +159,7 @@
             }
 
             if (window.heap && userId) {
+                // Changed references to Contentsquare.identify (using heap function name)
                 heap.identify(userId);
                 identified = true;
                 sharedIdentity = userId;
@@ -189,7 +188,7 @@
             } else if (data.type === 'resetIdentity') {
                 if (window.heap) {
                     heap.resetIdentity();
-                    console.log('DESKTOP: Received resetIdentity command and executed heap.resetIdentity().');
+                    console.log('DESKTOP: Received resetIdentity command and executed Contentsquare.resetIdentity().');
                 }
                 resetUI();
             }
