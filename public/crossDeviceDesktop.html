@@ -95,7 +95,7 @@
         let sharedIdentity = null;
         let currentIdentity = 'UNSET';
 
-        // Function to reliably read and display the Heap IDs (NOW POSSIBLE)
+        // Function to reliably read and display the Heap IDs and SEND to Host
         function displayAndSendIds() {
             if (window.heap && typeof heap.getUserId === 'function') {
                 const userId = heap.getUserId() || "N/A (Loading)";
@@ -122,9 +122,12 @@
                     setTimeout(displayAndSendIds, 100);
                 }
             } else {
-                // FALLBACK: Display generic error if Heap SDK fails to load entirely
-                document.getElementById('user-id').textContent = "SDK failed to load";
-                document.getElementById('session-id').textContent = "SDK failed to load";
+                // FALLBACK: Display generic message since API access is blocked
+                const ACCESS_BLOCKED_MSG = "API access blocked";
+                document.getElementById('user-id').textContent = ACCESS_BLOCKED_MSG;
+                document.getElementById('session-id').textContent = ACCESS_BLOCKED_MSG;
+                document.getElementById('user-id').classList.add('note');
+                document.getElementById('session-id').classList.add('note');
             }
         }
 

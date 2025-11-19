@@ -186,7 +186,6 @@
                 heap.resetIdentity();
                 console.log('HOST: heap.resetIdentity() called on host page.');
             }
-            // Send reset command to iframes
             const resetCommand = { type: 'resetIdentity' };
             const mobileIframe = document.getElementById('mobile-iframe');
             const desktopIframe = document.getElementById('desktop-iframe');
@@ -200,7 +199,6 @@
             sharedIdentity = null;
         }
 
-        // Call reset immediately on page load/reload
         resetHeapIdentity();
 
 
