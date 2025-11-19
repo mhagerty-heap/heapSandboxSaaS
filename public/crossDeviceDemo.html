@@ -15,32 +15,115 @@
         h1 { color: #1a73e8; margin-bottom: 20px; }
 
         /* CONTAINER: Ensures side-by-side layout */
-        #demo-container { display: flex; justify-content: center; gap: 80px; height: 680px; margin-top: 30px; }
-        .device-panel { background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden; display: flex; flex-direction: column; }
-        .device-header { background-color: #e8e8e8; padding: 10px; font-weight: bold; text-align: center; border-bottom: 1px solid #ddd; }
+        #demo-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            height: 680px;
+            margin-top: 30px;
+        }
+
+        /* GENERAL IFRAME PANEL STYLING */
+        .device-panel {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .device-header {
+            background-color: #e8e8e8;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
         iframe { border: none; width: 100%; flex-grow: 1; }
-        #mobile-wrapper { position: relative; width: 320px; height: 650px; background-color: #333; border-radius: 40px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); padding: 40px 15px 50px 15px; display: flex; flex-direction: column; align-items: center; box-sizing: content-box; }
-        #mobile-wrapper > .device-header { display: none; }
-        #mobile-screen { width: 100%; height: 100%; background-color: white; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-        .notch { width: 100px; height: 15px; background-color: #555; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10; }
-        #mobile-iframe { width: 100%; height: 100%; background-color: white; border-radius: 15px; }
-        .home-button { width: 40px; height: 40px; background-color: #555; border-radius: 50%; margin-top: 20px; border: 2px solid #666; cursor: default; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 2; }
-        #desktop-panel { flex-grow: 1; min-width: 600px; max-width: 900px; }
-        .controls { display: none; }
-        #id-display { margin-top: 20px; padding: 15px; background: #e6e6ff; border: 1px solid #9999ff; border-radius: 5px; font-family: Arial, sans-serif; font-size: 0.9em;}
-        #id-display p { margin: 5px 0; font-family: monospace; background: #fff; padding: 2px 5px; border-radius: 3px; }
+
+        /* MOBILE PHONE STYLING */
+        #mobile-wrapper {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background-color: #333;
+            border-radius: 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            padding: 40px 15px 50px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: content-box;
+        }
+
+        /* HIDE THE IFRAME HEADER INSIDE THE PHONE FRAME */
+        #mobile-wrapper > .device-header {
+            display: none;
+        }
+
+        #mobile-screen {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .notch {
+            width: 100px;
+            height: 15px;
+            background-color: #555;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        #mobile-iframe {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 15px;
+        }
+
+        .home-button {
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+            margin-top: 20px;
+            border: 2px solid #666;
+            cursor: default;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* DESKTOP PANEL STYLING */
+        #desktop-panel {
+            flex-grow: 1;
+            min-width: 600px;
+            max-width: 900px;
+        }
+
+        .controls {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
     <p>Run this demo using a local web server (e.g., http://localhost:8000). The Host acts as the central Identity store.</p>
-
-    <div id="id-display">
-        <h3>Host Received IDs (Via postMessage Bridge)</h3>
-        <p id="mobile-data">MOBILE IDs: Waiting for data...</p>
-        <p id="desktop-data">DESKTOP IDs: Waiting for data...</p>
-    </div>
 
     <div id="demo-container">
 
@@ -62,16 +145,6 @@
     <script>
         // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
         let sharedIdentity = null;
-
-        // Function to update the main page with received IDs
-        function updateHostDisplay(platform, userId, sessionId) {
-            const platformElement = document.getElementById(platform + '-data');
-            if (!platformElement) return;
-
-            platformElement.innerHTML = `
-                <strong>${platform.toUpperCase()} IDs:</strong> User ID: ${userId || 'N/A'} | Session ID: ${sessionId || 'N/A'}
-            `;
-        }
 
         // Function to reset Heap identity across all three contexts
         function resetHeapIdentity() {
@@ -111,12 +184,9 @@
                 }
             }
 
-            // 2. RECEIVE ANONYMOUS IDs (New Logic from Iframes)
-            if (data.type === 'anonymousIds' && data.platform && data.userId) {
-                updateHostDisplay(data.platform, data.userId, data.sessionId);
-            }
+            // NOTE: Removed logic for receiving anonymousIds
 
-            // 3. RESPOND to Desktop's request for the Identity upon login click
+            // 2. RESPOND to Desktop's request for the Identity upon login click
             if (data.type === 'requestIdentity') {
                 const desktopIframe = document.getElementById('desktop-iframe');
                 if (desktopIframe && desktopIframe.contentWindow) {

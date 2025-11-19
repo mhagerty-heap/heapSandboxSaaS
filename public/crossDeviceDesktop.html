@@ -21,9 +21,10 @@
             min-width: 150px;
         }
 
-        .data-box { background-color: #e8f0fe; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: left; font-size: 0.9em; }
-        .identified { color: green; font-weight: bold; }
+        /* Removed: .data-box styles */
+
         .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
+        .identified { color: green; font-weight: bold; }
         .note { color: #cc0000; font-style: italic; }
 
         .reset-note {
@@ -32,6 +33,14 @@
             margin-bottom: 20px;
             font-size: 0.9em;
             padding: 5px;
+        }
+
+        /* Style for the identity display field */
+        #identity-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            padding: 5px 0;
+            font-weight: bold;
         }
 
         .embedded-controls {
@@ -66,11 +75,9 @@
 </head>
 <body>
     <h2 id='status-header'>Welcome Back (Desktop)</h2>
-    <div class="data-box">
-        <p><strong>Heap State:</strong></p>
-        <p>User ID: <span id='user-id' class='heap-id'>...</span></p>
-        <p>Session ID: <span id='session-id' class='heap-id'>...</span></p>
-        <p>Identity: <span id='identity-id' class='heap-id'>UNSET</span></p>
+
+    <div id="identity-display">
+        Identity: <span id='identity-id' class='heap-id'>UNSET</span>
     </div>
 
     <p id='status-text'>Action required to link identity: Please click Login after signing up on Mobile.</p>
@@ -94,54 +101,17 @@
         let identified = false;
         let sharedIdentity = null;
         let currentIdentity = 'UNSET';
-        // FIX: Define constant globally
-        const ACCESS_BLOCKED_MSG = "API access blocked";
 
-        // Function to reliably read and display the Heap IDs and SEND to Host
-        function displayAndSendIds() {
-            let userId = ACCESS_BLOCKED_MSG;
-            let sessionId = ACCESS_BLOCKED_MSG;
-            let isDataReady = false;
-
-            if (window.heap && typeof heap.getUserId === 'function') {
-                const heapUserId = heap.getUserId();
-                const heapSessionId = heap.getSessionId();
-
-                if (heapUserId && heapSessionId) {
-                    userId = heapUserId;
-                    sessionId = heapSessionId;
-                    isDataReady = true;
-
-                    document.getElementById('user-id').classList.remove('note');
-                    document.getElementById('session-id').classList.remove('note');
-                }
-            }
-
-            // 1. Display Locally
-            document.getElementById('user-id').textContent = userId;
-            document.getElementById('session-id').textContent = sessionId;
+        // Function to update the Identity field
+        function updateIdentityDisplay() {
             document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
-
-            // 2. Send to Host (CRITICAL: Always send a status or data)
-            window.parent.postMessage({
-                type: 'anonymousIds',
-                platform: 'desktop',
-                userId: userId,
-                sessionId: sessionId
-            }, '*');
-
-            if (!isDataReady) {
-                // Keep trying until Heap finishes loading
-                document.getElementById('user-id').classList.add('note');
-                document.getElementById('session-id').classList.add('note');
-                setTimeout(displayAndSendIds, 100);
-            }
         }
 
         // Function to reset the UI state
         function resetUI() {
             identified = false;
             sharedIdentity = null;
+            currentIdentity = 'UNSET';
             document.getElementById('status-header').textContent = 'Welcome Back (Desktop)';
             document.getElementById('identity-id').textContent = 'UNSET';
             document.getElementById('identity-id').classList.remove('identified');
@@ -150,11 +120,11 @@
             document.getElementById('login-btn').disabled = false;
             document.getElementById('login-btn').textContent = 'Simulate Login';
             document.getElementById('status-text').textContent = 'Action required to link identity: Please click Login after signing up on Mobile.';
-            displayAndSendIds();
+            updateIdentityDisplay();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(displayAndSendIds, 100);
+            updateIdentityDisplay();
         });
 
         function handleLoginClick() {
@@ -205,7 +175,7 @@
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('purchase-btn').style.display = 'block';
 
-            displayAndSendIds();
+            updateIdentityDisplay();
         }
 
         document.getElementById('login-btn').addEventListener('click', handleLoginClick);
