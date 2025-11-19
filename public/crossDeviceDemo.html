@@ -141,6 +141,13 @@
 <body>
 
     <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
+    <p>Run this demo using a local web server (e.g., http://localhost:8000). The Host acts as the central Identity store.</p>
+
+    <div id="id-display">
+        <h3>Host Received IDs (Via postMessage Bridge)</h3>
+        <p id="mobile-data">MOBILE IDs: Waiting for data...</p>
+        <p id="desktop-data">DESKTOP IDs: Waiting for data...</p>
+    </div>
 
     <div id="demo-container">
 
@@ -165,10 +172,15 @@
 
         // Function to update the main page with received IDs
         function updateHostDisplay(platform, userId, sessionId) {
-            // Note: This function remains for diagnostic purposes if needed.
+            const platformElement = document.getElementById(platform + '-data');
+            if (!platformElement) return;
+
+            platformElement.innerHTML = `
+                <strong>${platform.toUpperCase()} IDs:</strong> User ID: ${userId || 'N/A'} | Session ID: ${sessionId || 'N/A'}
+            `;
         }
 
-        // Function to reset Contentsquare identity across all three contexts
+        // Function to reset Heap identity across all three contexts
         function resetHeapIdentity() {
             if (window.heap) {
                 heap.resetIdentity();
@@ -206,7 +218,12 @@
                 }
             }
 
-            // 2. RESPOND to Desktop's request for the Identity upon login click
+            // 2. RECEIVE ANONYMOUS IDs (PostMessage Bridge for Display)
+            if (data.type === 'anonymousIds' && data.platform && data.userId) {
+                updateHostDisplay(data.platform, data.userId, data.sessionId);
+            }
+
+            // 3. RESPOND to Desktop's request for the Identity upon login click
             if (data.type === 'requestIdentity') {
                 const desktopIframe = document.getElementById('desktop-iframe');
                 if (desktopIframe && desktopIframe.contentWindow) {

@@ -79,6 +79,9 @@
     </div>
 
     <p id='status-text'>Action required to link identity: Please click Login after signing up on Mobile.</p>
+
+    <button id='browse-desktop-btn' onclick="simulateBrowseDesktop()">Browse Products (Click)</button>
+
     <button id='login-btn'>Simulate Login</button>
     <button id='purchase-btn' style='display:none;'>Complete Purchase (Manual Track)</button>
 
@@ -90,7 +93,7 @@
         <ol>
             <li>In the **Mobile App** (left), click **Browse Products (Tap)**. (Anonymous event).</li>
             <li>In the **Mobile App** (left), click **Start Sign Up** and enter an ID (e.g., <code>user@example.com</code>). The **Mobile Identity** updates. The **Desktop Identity remains UNSET.**</li>
-            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>Contentsquare.identify()</code> call, completing the stitch.</li>
+            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>identify()</code> call, completing the stitch.</li>
             <li>In the **Desktop Web** (right), click **Complete Purchase**. (Final identified event linked to the shared Identity).</li>
         </ol>
     </div>
@@ -105,6 +108,11 @@
             document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
         }
 
+        // Function to update the Identity field
+        function updateIdentityDisplay() {
+            document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
+        }
+
         // Function to reset the UI state
         function resetUI() {
             identified = false;
@@ -113,12 +121,20 @@
             document.getElementById('status-header').textContent = 'Welcome Back (Desktop)';
             document.getElementById('identity-id').textContent = 'UNSET';
             document.getElementById('identity-id').classList.remove('identified');
+
+            document.getElementById('browse-desktop-btn').style.display = 'inline-block';
             document.getElementById('login-btn').style.display = 'inline-block';
             document.getElementById('purchase-btn').style.display = 'none';
+
             document.getElementById('login-btn').disabled = false;
             document.getElementById('login-btn').textContent = 'Simulate Login';
             document.getElementById('status-text').textContent = 'Action required to link identity: Please click Login after signing up on Mobile.';
             updateIdentityDisplay();
+        }
+
+        // Function for desktop browse button
+        function simulateBrowseDesktop() {
+            console.log('DESKTOP: Click captured by Autocapture (Browse Products).');
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -148,6 +164,7 @@
             }
             document.getElementById('status-text').innerHTML = 'Purchase Complete! The **Cross-Device Funnel** is now closed.';
             document.getElementById('purchase-btn').disabled = true;
+            document.getElementById('browse-desktop-btn').disabled = true;
         }
 
         function completeStitch(userId) {
@@ -159,8 +176,7 @@
             }
 
             if (window.heap && userId) {
-                // Changed references to Contentsquare.identify (using heap function name)
-                heap.identify(userId);
+                heap.identify(userId); // Changed to identify()
                 identified = true;
                 sharedIdentity = userId;
 
@@ -173,6 +189,7 @@
             document.getElementById('status-text').innerHTML = 'The anonymous Desktop session is now linked to the Mobile session!';
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('purchase-btn').style.display = 'block';
+            document.getElementById('browse-desktop-btn').style.display = 'inline-block';
 
             updateIdentityDisplay();
         }
