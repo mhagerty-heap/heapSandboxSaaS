@@ -94,6 +94,8 @@
         let identified = false;
         let sharedIdentity = null;
         let currentIdentity = 'UNSET';
+        // FIX: Define constant globally
+        const ACCESS_BLOCKED_MSG = "API access blocked";
 
         // Function to reliably read and display the Heap IDs and SEND to Host
         function displayAndSendIds() {
@@ -106,7 +108,6 @@
                 const heapSessionId = heap.getSessionId();
 
                 if (heapUserId && heapSessionId) {
-                    // Success: Use actual IDs
                     userId = heapUserId;
                     sessionId = heapSessionId;
                     isDataReady = true;
