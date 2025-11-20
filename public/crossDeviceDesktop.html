@@ -91,7 +91,7 @@
     <div class="embedded-controls">
         <h3>💡 Demo Steps (Observe the Identity Field)</h3>
 
-        <p class="reset-note">NOTE: Loading or refreshing this page starts the demo with an anonymous session on all devices (Identity: UNSET).</p>
+        <p class="reset-note">NOTE: Loading or refreshing this page starts the demo with an anonymous session on all devices (Identity: UNSET). To force a new anonymous ID, clear your browser cookies or use an Incognito/Private window.</p>
 
         <ol>
             <li>In the **Mobile App** (left), click **Browse Products (Tap)**. (Anonymous event).</li>
@@ -105,12 +105,6 @@
         let identified = false;
         let sharedIdentity = null;
         let currentIdentity = 'UNSET';
-        const COOKIE_NAME = '_hp2_id'; // Standard Heap cookie name
-
-        function deleteCookie(name, domain) {
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            console.log(`DESKTOP: Deleted cookie: ${name}.`);
-        }
 
         // Function to update the Identity field
         function updateIdentityDisplay() {
@@ -210,11 +204,6 @@
                 if (window.heap) {
                     heap.resetIdentity();
                     console.log('DESKTOP: Received resetIdentity command and executed Contentsquare.resetIdentity().');
-                }
-
-                // NEW: Delete the cookie on this specific domain/subdomain
-                if (data.clearCookie) {
-                    deleteCookie(COOKIE_NAME);
                 }
                 resetUI();
             }

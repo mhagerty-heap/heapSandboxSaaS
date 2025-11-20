@@ -161,28 +161,14 @@
     <script>
         // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
         let sharedIdentity = null;
-        const COOKIE_NAME = '_hp2_id'; // Standard Heap cookie name
-
-        // Function to delete the Heap cookie (for forced new session)
-        function deleteCookie(name, domain) {
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + domain + ';';
-            console.log(`HOST: Deleted cookie: ${name} for domain ${domain}.`);
-        }
 
         // Function to reset Heap identity across all three contexts
         function resetHeapIdentity() {
             if (window.heap) {
                 heap.resetIdentity();
-                console.log('HOST: Contentsquare identity reset (heap.resetIdentity()).');
+                console.log('HOST: Contentsquare identity reset on host page.');
             }
-
-            // 1. Force delete the cookie on the current host domain (index.html)
-            // Note: Since Vercel uses a Public Suffix List (.app), we target the specific subdomain.
-            const hostDomain = window.location.hostname;
-            deleteCookie(COOKIE_NAME, hostDomain);
-
-            // 2. Send reset command to iframes
-            const resetCommand = { type: 'resetIdentity', clearCookie: true, domain: hostDomain };
+            const resetCommand = { type: 'resetIdentity' };
             const mobileIframe = document.getElementById('mobile-iframe');
             const desktopIframe = document.getElementById('desktop-iframe');
 
@@ -195,7 +181,6 @@
             sharedIdentity = null;
         }
 
-        // Call reset immediately on page load/reload
         resetHeapIdentity();
 
 
