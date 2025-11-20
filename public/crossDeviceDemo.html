@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cross-Device Demo (Project 527942070)</title>
+    <title>Cross-Device Identity Stitching</title>
 
     <script type="text/javascript">
       window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
@@ -14,15 +14,13 @@
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f9; }
         h1 { color: #1a73e8; margin-bottom: 20px; }
 
-        /* CONTAINER: Ensures side-by-side layout and responsiveness */
+        /* CONTAINER: Ensures side-by-side layout */
         #demo-container {
             display: flex;
             justify-content: center;
             gap: 80px;
-            min-height: 680px;
+            height: 680px;
             margin-top: 30px;
-            width: 100%;
-            box-sizing: border-box;
         }
 
         /* GENERAL IFRAME PANEL STYLING */
@@ -49,7 +47,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-shrink: 0; /* Prevents mobile section from shrinking below its size */
+            flex-shrink: 0;
             width: 320px;
         }
 
@@ -127,19 +125,37 @@
 
         /* DESKTOP PANEL STYLING */
         #desktop-panel {
-            flex-grow: 1; /* Allows desktop to consume/shrink space */
-            min-width: 350px; /* Minimum width for readability */
+            flex-grow: 1;
+            min-width: 600px;
             max-width: 900px;
         }
 
         .controls {
             display: none;
         }
+
+        /* HOST ID DISPLAY STYLING */
+        #id-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e6e6ff;
+            border: 1px solid #9999ff;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+        }
+        #id-display p {
+            margin: 5px 0;
+            font-family: monospace;
+            background: #fff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
+    <h1>🖥️ Cross-Device Identity Stitching</h1>
 
     <div id="demo-container">
 
