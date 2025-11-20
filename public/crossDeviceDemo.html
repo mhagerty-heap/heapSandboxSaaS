@@ -1,221 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Device Identity Stitching</title>
+
     <script type="text/javascript">
       window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
       heap.load("527942070");
     </script>
     <style>
-        body { font-family: sans-serif; padding: 20px; text-align: center; background-color: #f7f7f7; display: flex; flex-direction: column; justify-content: space-between; height: calc(100% - 40px); }
-        h2 { color: #f9a000; margin-top: 0; }
+        /* BASE STYLES */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f9; }
+        h1 { color: #1a73e8; margin-bottom: 20px; }
 
-        button {
-            padding: 10px 20px;
-            background-color: #009688;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-
-            /* FIX: Ensure buttons are sized appropriately and do not stretch */
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 80%; /* Standard width */
-            max-width: 300px; /* Max size limit */
-        }
-
-        .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
-        .identified { color: green; font-weight: bold; }
-        .note { color: #cc0000; font-style: italic; }
-
-        .reset-note {
-            color: #cc0000;
-            font-weight: bold;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            padding: 5px;
-        }
-
-        /* Style for the identity display field */
-        #identity-display {
-            font-size: 1.2em;
-            margin: 15px 0;
-            padding: 5px 0;
-            font-weight: bold;
-        }
-
-        .embedded-controls {
+        /* CONTAINER: Ensures side-by-side layout */
+        #demo-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            min-height: 680px; /* Use min-height to allow full content height */
             margin-top: 30px;
-            padding: 15px;
-            background-color: #e8f0fe;
-            border: 1px solid #cceeff;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 0.85em;
-            flex-grow: 1;
+        }
+
+        /* GENERAL IFRAME PANEL STYLING */
+        .device-panel {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
         }
-        .embedded-controls h3 {
-            margin-top: 0;
-            color: #1a73e8;
-            font-size: 1.1em;
+        .device-header {
+            background-color: #e8e8e8;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        iframe { border: none; width: 100%; flex-grow: 1; }
+
+        /* MOBILE SECTION STYLES (FIXED WIDTH) */
+        #mobile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0; /* CRITICAL FIX: Prevents this entire section from shrinking */
+            width: 350px; /* Set a definitive width for the entire mobile column */
+        }
+
+        #mobile-section .device-header {
             margin-bottom: 10px;
+            width: 320px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .embedded-controls ol {
-            padding-left: 20px;
-            margin-top: 0;
-            line-height: 1.4;
-            list-style-position: inside;
+
+        #mobile-wrapper {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background-color: #333;
+            border-radius: 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            padding: 40px 15px 50px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: content-box;
         }
-        .embedded-controls li {
-            margin-bottom: 5px;
+
+        /* HIDE THE IFRAME HEADER INSIDE THE PHONE FRAME */
+        #mobile-wrapper > .device-header {
+            display: none;
+        }
+
+        #mobile-screen {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .notch {
+            width: 100px;
+            height: 15px;
+            background-color: #555;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        #mobile-iframe {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 15px;
+        }
+
+        .home-button {
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+            margin-top: 20px;
+            border: 2px solid #666;
+            cursor: default;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* DESKTOP PANEL STYLING */
+        #desktop-panel {
+            flex-grow: 1; /* Allows desktop to consume/shrink space */
+            min-width: 350px; /* Minimum width for readability */
+            max-width: 900px;
+        }
+
+        .controls {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h2 id='status-header'>Welcome Back (Desktop)</h2>
 
-    <div id="identity-display">
-        Identity: <span id='identity-id' class='heap-id'>UNSET</span>
-    </div>
+    <h1>🖥️ Cross-Device Identity Stitching</h1>
 
-    <p id='status-text'>Action required to link identity: Please click Login after signing up on Mobile.</p>
+    <div id="demo-container">
 
-    <button id='browse-desktop-btn' onclick="simulateBrowseDesktop()">Browse Products (Click)</button>
+        <div id="mobile-section">
+            <div class="device-header">📱 Mobile Experience</div>
+            <div id="mobile-wrapper">
+                <div class="notch"></div>
+                <div id="mobile-screen">
+                    <iframe id="mobile-iframe" src="https://heapbank.vercel.app/crossDeviceMobile.html"></iframe>
+                </div>
+                <div class="home-button"></div>
+            </div>
+        </div>
 
-    <button id='login-btn'>Simulate Login</button>
-    <button id='purchase-btn' style='display:none;'>Complete Purchase (Manual Track)</button>
-
-    <div class="embedded-controls">
-        <h3>💡 Demo Steps (Observe the Identity Field)</h3>
-
-        <p class="reset-note">NOTE: Loading or refreshing this page starts the demo with an anonymous session on all devices (Identity: UNSET).</p>
-
-        <ol>
-            <li>In the **Mobile App** (left), click **Browse Products (Tap)**. (Anonymous event).</li>
-            <li>In the **Mobile App** (left), click **Start Sign Up** and enter an ID (e.g., <code>user@example.com</code>). The **Mobile Identity** updates. The **Desktop Identity remains UNSET.**</li>
-            <li>In the **Desktop Web** (right), click **Simulate Login**. This action pulls the ID from the Host and runs the second <code>identify()</code> call, completing the stitch.</li>
-            <li>In the **Desktop Web** (right), click **Complete Purchase**. (Final identified event linked to the shared Identity).</li>
-        </ol>
+        <div id="desktop-panel" class="device-panel">
+            <div class="device-header">🖥️ Desktop Web Experience</div>
+            <iframe id="desktop-iframe" src="https://heap-sandbox-saas.vercel.app/crossDeviceDesktop.html"></iframe>
+        </div>
     </div>
 
     <script>
-        let identified = false;
+        // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
         let sharedIdentity = null;
-        let currentIdentity = 'UNSET';
 
-        // Function to update the Identity field
-        function updateIdentityDisplay() {
-            document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
-        }
-
-        // Function for desktop browse button
-        function simulateBrowseDesktop() {
-            console.log('DESKTOP: Click captured by Autocapture (Browse Products).');
-        }
-
-        // Function to reset the UI state
-        function resetUI() {
-            identified = false;
-            sharedIdentity = null;
-            currentIdentity = 'UNSET';
-            document.getElementById('status-header').textContent = 'Welcome Back (Desktop)';
-            document.getElementById('identity-id').textContent = 'UNSET';
-            document.getElementById('identity-id').classList.remove('identified');
-
-            document.getElementById('browse-desktop-btn').style.display = 'block';
-            document.getElementById('login-btn').style.display = 'block';
-            document.getElementById('purchase-btn').style.display = 'none';
-
-            document.getElementById('login-btn').disabled = false;
-            document.getElementById('login-btn').textContent = 'Simulate Login';
-            document.getElementById('status-text').textContent = 'Action required to link identity: Please click Login after signing up on Mobile.';
-            updateIdentityDisplay();
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            updateIdentityDisplay();
-        });
-
-        function handleLoginClick() {
-            if (identified) {
-                console.log('DESKTOP: Already identified as ' + sharedIdentity);
-                return;
-            }
-
-            window.parent.postMessage({ type: 'requestIdentity' }, '*');
-
-            document.getElementById('login-btn').disabled = true;
-            document.getElementById('login-btn').textContent = 'Waiting for Identity...';
-        }
-
-        function simulatePurchase() {
-            if (!identified) {
-                 alert('You must log in first to complete the purchase.');
-                 return;
-            }
+        // Function to reset Heap identity across all three contexts
+        function resetHeapIdentity() {
             if (window.heap) {
-                heap.track('Purchase Completed', { value: 99.99, platform: 'desktop' });
-                console.log('DESKTOP: Manual event tracked: Purchase Completed.');
+                heap.resetIdentity();
+                console.log('HOST: Contentsquare identity reset on host page.');
             }
-            document.getElementById('status-text').innerHTML = 'Purchase Complete! The **Cross-Device Funnel** is now closed.';
-            document.getElementById('purchase-btn').disabled = true;
-            document.getElementById('browse-desktop-btn').disabled = true;
+            const resetCommand = { type: 'resetIdentity' };
+            const mobileIframe = document.getElementById('mobile-iframe');
+            const desktopIframe = document.getElementById('desktop-iframe');
+
+            if (mobileIframe && mobileIframe.contentWindow) {
+                mobileIframe.contentWindow.postMessage(resetCommand, '*');
+            }
+            if (desktopIframe && desktopIframe.contentWindow) {
+                desktopIframe.contentWindow.postMessage(resetCommand, '*');
+            }
+            sharedIdentity = null;
         }
 
-        function completeStitch(userId) {
-            if (!userId) {
-                alert('Host page failed to provide an Identity. Did you complete the Mobile Sign Up?');
-                document.getElementById('login-btn').disabled = false;
-                document.getElementById('login-btn').textContent = 'Simulate Login';
-                return;
-            }
+        resetHeapIdentity();
 
-            if (window.heap && userId) {
-                heap.identify(userId);
-                identified = true;
-                sharedIdentity = userId;
 
-                console.log('DESKTOP: Final identify(' + userId + ') called on this device.');
-            }
-
-            document.getElementById('status-header').innerHTML = '✅ Identity Stitched!';
-            document.getElementById('identity-id').textContent = sharedIdentity;
-            document.getElementById('identity-id').classList.add('identified');
-            document.getElementById('status-text').innerHTML = 'The anonymous Desktop session is now linked to the Mobile session!';
-            document.getElementById('login-btn').style.display = 'none';
-            document.getElementById('purchase-btn').style.display = 'block';
-            document.getElementById('browse-desktop-btn').style.display = 'block';
-
-            updateIdentityDisplay();
-        }
-
-        document.getElementById('login-btn').addEventListener('click', handleLoginClick);
-        document.getElementById('purchase-btn').addEventListener('click', simulatePurchase);
-
-        // LISTENER FOR HOST RESET COMMAND
         window.addEventListener('message', function(event) {
             const data = event.data;
-            if (data.type === 'identityForLogin') {
-                completeStitch(data.userId);
-            } else if (data.type === 'resetIdentity') {
+
+            // 1. RECEIVE IDENTITY (Stitching Logic)
+            if (data.type === 'heapIdentify' && data.userId) {
+                const userId = data.userId;
+
+                sharedIdentity = userId;
+                console.log('HOST CONTROLLER: Identity received and stored: ' + userId);
+
                 if (window.heap) {
-                    heap.resetIdentity();
-                    console.log('DESKTOP: Received resetIdentity command and executed Contentsquare.resetIdentity().');
+                    heap.identify(userId);
+                    console.log('HOST: Contentsquare identify(' + userId + ') called on host page.');
                 }
-                resetUI();
+            }
+
+            // 2. RESPOND to Desktop's request for the Identity upon login click
+            if (data.type === 'requestIdentity') {
+                const desktopIframe = document.getElementById('desktop-iframe');
+                if (desktopIframe && desktopIframe.contentWindow) {
+                    desktopIframe.contentWindow.postMessage({ type: 'identityForLogin', userId: sharedIdentity }, '*');
+                    console.log('HOST: Sending stored Identity (' + sharedIdentity + ') back to Desktop for Login.');
+                }
             }
         });
-
-        // Execute initial reset on load
-        if (window.heap) {
-            heap.resetIdentity();
-        }
-        resetUI();
     </script>
+
 </body>
 </html>

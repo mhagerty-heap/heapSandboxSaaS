@@ -18,7 +18,7 @@
             cursor: pointer;
             margin-top: 20px;
 
-            /* FIX: Ensure buttons are sized appropriately and do not stretch to 100% width */
+            /* FIX: Ensure buttons are sized appropriately and do not stretch */
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -127,8 +127,8 @@
             document.getElementById('identity-id').textContent = 'UNSET';
             document.getElementById('identity-id').classList.remove('identified');
 
-            document.getElementById('browse-desktop-btn').style.display = 'block'; // Changed from inline-block to block for better centering
-            document.getElementById('login-btn').style.display = 'block'; // Changed from inline-block to block for better centering
+            document.getElementById('browse-desktop-btn').style.display = 'block';
+            document.getElementById('login-btn').style.display = 'block';
             document.getElementById('purchase-btn').style.display = 'none';
 
             document.getElementById('login-btn').disabled = false;
@@ -189,7 +189,7 @@
             document.getElementById('status-text').innerHTML = 'The anonymous Desktop session is now linked to the Mobile session!';
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('purchase-btn').style.display = 'block';
-            document.getElementById('browse-desktop-btn').style.display = 'block'; // Changed to block
+            document.getElementById('browse-desktop-btn').style.display = 'block';
 
             updateIdentityDisplay();
         }
