@@ -19,7 +19,7 @@
             display: flex;
             justify-content: center;
             gap: 80px;
-            min-height: 680px; /* Use min-height to allow full content height */
+            min-height: 680px;
             margin-top: 30px;
         }
 
@@ -42,13 +42,13 @@
         }
         iframe { border: none; width: 100%; flex-grow: 1; }
 
-        /* MOBILE SECTION STYLES (FIXED WIDTH) */
+        /* MOBILE SECTION STYLES */
         #mobile-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-shrink: 0; /* CRITICAL FIX: Prevents this entire section from shrinking */
-            width: 350px; /* Set a definitive width for the entire mobile column */
+            flex-shrink: 0;
+            width: 350px;
         }
 
         #mobile-section .device-header {
@@ -125,8 +125,8 @@
 
         /* DESKTOP PANEL STYLING */
         #desktop-panel {
-            flex-grow: 1; /* Allows desktop to consume/shrink space */
-            min-width: 350px; /* Minimum width for readability */
+            flex-grow: 1;
+            min-width: 350px;
             max-width: 900px;
         }
 
@@ -161,14 +161,28 @@
     <script>
         // --- HOST PAGE JAVASCRIPT: THE STITCHING CONTROLLER ---
         let sharedIdentity = null;
+        const COOKIE_NAME = '_hp2_id'; // Standard Heap cookie name
+
+        // Function to delete the Heap cookie (for forced new session)
+        function deleteCookie(name, domain) {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + domain + ';';
+            console.log(`HOST: Deleted cookie: ${name} for domain ${domain}.`);
+        }
 
         // Function to reset Heap identity across all three contexts
         function resetHeapIdentity() {
             if (window.heap) {
                 heap.resetIdentity();
-                console.log('HOST: Contentsquare identity reset on host page.');
+                console.log('HOST: Contentsquare identity reset (heap.resetIdentity()).');
             }
-            const resetCommand = { type: 'resetIdentity' };
+
+            // 1. Force delete the cookie on the current host domain (index.html)
+            // Note: Since Vercel uses a Public Suffix List (.app), we target the specific subdomain.
+            const hostDomain = window.location.hostname;
+            deleteCookie(COOKIE_NAME, hostDomain);
+
+            // 2. Send reset command to iframes
+            const resetCommand = { type: 'resetIdentity', clearCookie: true, domain: hostDomain };
             const mobileIframe = document.getElementById('mobile-iframe');
             const desktopIframe = document.getElementById('desktop-iframe');
 
@@ -181,6 +195,7 @@
             sharedIdentity = null;
         }
 
+        // Call reset immediately on page load/reload
         resetHeapIdentity();
 
 

@@ -17,13 +17,11 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
-
-            /* FIX: Ensure buttons are sized appropriately and do not stretch */
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 80%; /* Standard width */
-            max-width: 300px; /* Max size limit */
+            width: 80%;
+            max-width: 300px;
         }
 
         .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
@@ -107,6 +105,12 @@
         let identified = false;
         let sharedIdentity = null;
         let currentIdentity = 'UNSET';
+        const COOKIE_NAME = '_hp2_id'; // Standard Heap cookie name
+
+        function deleteCookie(name, domain) {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            console.log(`DESKTOP: Deleted cookie: ${name}.`);
+        }
 
         // Function to update the Identity field
         function updateIdentityDisplay() {
@@ -206,6 +210,11 @@
                 if (window.heap) {
                     heap.resetIdentity();
                     console.log('DESKTOP: Received resetIdentity command and executed Contentsquare.resetIdentity().');
+                }
+
+                // NEW: Delete the cookie on this specific domain/subdomain
+                if (data.clearCookie) {
+                    deleteCookie(COOKIE_NAME);
                 }
                 resetUI();
             }
