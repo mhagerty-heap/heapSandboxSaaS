@@ -17,10 +17,13 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
-            /* FIX: Make buttons inline-block so they don't stretch */
-            display: inline-block;
-            min-width: 150px;
-            width: auto;
+
+            /* FIX: Ensure buttons are sized appropriately and do not stretch to 100% width */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%; /* Standard width */
+            max-width: 300px; /* Max size limit */
         }
 
         .heap-id { font-family: monospace; background-color: #fff; padding: 1px 3px; border-radius: 3px; }
@@ -110,6 +113,11 @@
             document.getElementById('identity-id').textContent = identified ? sharedIdentity : currentIdentity;
         }
 
+        // Function for desktop browse button
+        function simulateBrowseDesktop() {
+            console.log('DESKTOP: Click captured by Autocapture (Browse Products).');
+        }
+
         // Function to reset the UI state
         function resetUI() {
             identified = false;
@@ -119,19 +127,14 @@
             document.getElementById('identity-id').textContent = 'UNSET';
             document.getElementById('identity-id').classList.remove('identified');
 
-            document.getElementById('browse-desktop-btn').style.display = 'inline-block';
-            document.getElementById('login-btn').style.display = 'inline-block';
+            document.getElementById('browse-desktop-btn').style.display = 'block'; // Changed from inline-block to block for better centering
+            document.getElementById('login-btn').style.display = 'block'; // Changed from inline-block to block for better centering
             document.getElementById('purchase-btn').style.display = 'none';
 
             document.getElementById('login-btn').disabled = false;
             document.getElementById('login-btn').textContent = 'Simulate Login';
             document.getElementById('status-text').textContent = 'Action required to link identity: Please click Login after signing up on Mobile.';
             updateIdentityDisplay();
-        }
-
-        // Function for desktop browse button
-        function simulateBrowseDesktop() {
-            console.log('DESKTOP: Click captured by Autocapture (Browse Products).');
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -186,7 +189,7 @@
             document.getElementById('status-text').innerHTML = 'The anonymous Desktop session is now linked to the Mobile session!';
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('purchase-btn').style.display = 'block';
-            document.getElementById('browse-desktop-btn').style.display = 'inline-block';
+            document.getElementById('browse-desktop-btn').style.display = 'block'; // Changed to block
 
             updateIdentityDisplay();
         }

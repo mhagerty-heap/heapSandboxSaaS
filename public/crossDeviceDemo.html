@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cross-Device Identity Stiching</title>
+    <title>Cross-Device Demo (Project 527942070)</title>
 
     <script type="text/javascript">
       window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
@@ -14,13 +14,15 @@
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f9; }
         h1 { color: #1a73e8; margin-bottom: 20px; }
 
-        /* CONTAINER: Ensures side-by-side layout */
+        /* CONTAINER: Ensures side-by-side layout and responsiveness */
         #demo-container {
             display: flex;
             justify-content: center;
             gap: 80px;
-            height: 680px;
+            min-height: 680px;
             margin-top: 30px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* GENERAL IFRAME PANEL STYLING */
@@ -43,10 +45,12 @@
         iframe { border: none; width: 100%; flex-grow: 1; }
 
         /* MOBILE PHONE STYLING */
-        #mobile-section { /* New wrapper for header + mobile-wrapper */
+        #mobile-section {
             display: flex;
             flex-direction: column;
             align-items: center;
+            flex-shrink: 0; /* Prevents mobile section from shrinking below its size */
+            width: 320px;
         }
 
         #mobile-section .device-header {
@@ -123,8 +127,8 @@
 
         /* DESKTOP PANEL STYLING */
         #desktop-panel {
-            flex-grow: 1;
-            min-width: 600px;
+            flex-grow: 1; /* Allows desktop to consume/shrink space */
+            min-width: 350px; /* Minimum width for readability */
             max-width: 900px;
         }
 
@@ -135,7 +139,7 @@
 </head>
 <body>
 
-    <h1>🖥️ Cross-Device Identity Stitching</h1>
+    <h1>🖥️ Cross-Device Demo (Project 527942070)</h1>
 
     <div id="demo-container">
 
